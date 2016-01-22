@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.input.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.view.RootLayoutController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Головна">
+               <items>
+                   <MenuItem mnemonicParsing="false" onAction="#handleStart" text="Головна"/>
+
+                   <MenuItem mnemonicParsing="false" onAction="#SaveImage" text="Зберегти як">
+                     <accelerator>
+                     </accelerator>
+                  </MenuItem>
+
+                  <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Вихід" />
+
+               </items>
+          </Menu>
+
+
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>

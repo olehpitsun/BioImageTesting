@@ -8,15 +8,12 @@ import sample.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.*;
-import org.opencv.imgproc.Imgproc;
 import sample.core.DB;
 import sample.model.Filters.FilterColection;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.sql.Connection;
@@ -26,37 +23,29 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import sample.model.Filters.FiltersOperations;
 import sample.model.PreProcessing.PreProcessingOperation;
 import sample.model.Segmentation.SegmentationColection;
+import sample.model.Segmentation.SegmentationOperations;
 import sample.tools.ImageOperations;
 import sample.tools.ValidateOperations;
 import sample.util.PreProcessingParam;
 
 public class StartController {
 
-    @FXML
-    private Button PrProcButton;
-    @FXML
-    private Button FilterButton;
-    @FXML
-    private Button SegmentationButton;
-    @FXML
-    private Button ObjectButton;
+
+
+
+
 
     @FXML
     private Button researchNameButton;
-
-    @FXML
-    private Button ContrastRangeButton;
-
     @FXML
     private Button researchPathButton;
-
     @FXML
     private Button loadImageButton;
     @FXML
     private Button setPreProcSettingsButton;
-
     @FXML
     private TextField researchNameField;
 
@@ -70,7 +59,6 @@ public class StartController {
     private TextField  DilateField;
     @FXML
     private TextField ErodeField;
-
     @FXML
     private TextField kSizeField;
     @FXML
@@ -79,10 +67,18 @@ public class StartController {
     private TextField sigmaSpaceField;
     @FXML
     private TextField sigmaColorField;
-
-
+    //for Segmentation
     @FXML
-    private Label pathToDirLabel;
+    private TextField ValueField;
+    @FXML
+    private TextField MaxValThresholdField;
+    @FXML
+    private TextField SegSigmaColor;
+    @FXML
+    private TextField SegSigmaSpace;
+    @FXML
+    private TextField SegDelta;
+
     @FXML
     private Label researchName;
     @FXML
@@ -95,55 +91,33 @@ public class StartController {
     private Label DilateLabel;
     @FXML
     private Label ErodeLabel;
-
     @FXML
     private Label kSizeLabel;
     @FXML
-    private Label sigmaLabel;
+    private Label MaxValThresholdLabel;
     @FXML
     private Label sigmaColorLabel;
     @FXML
     private Label igmaSpaceLabel;
-
-
-    @FXML
-    private ComboBox<FilterColection> comboBox;
-    @FXML
-    private ComboBox<SegmentationColection> SegmentationcomboBox;
-
-    @FXML
-    private ImageView histogram;
-
-    private boolean okClicked = false;
-    private ObservableList<FilterColection> comboBoxData = FXCollections.observableArrayList();
-
-    private ObservableList<SegmentationColection> comboBoxSegmentationData = FXCollections.observableArrayList();
-
-    private String filterType;
-
-    @FXML
-    private TextField SegkSizeField;
-    @FXML
-    private TextField SegSigma;
-    @FXML
-    private TextField SegSigmaColor;
-    @FXML
-    private TextField SegSigmaSpace;
-    @FXML
-    private TextField SegDelta;
-
-    @FXML
-    protected TextField LaplacianParametrField;
-    private String segType;
-
 
     @FXML
     protected ImageView preProcImage;
     @FXML
     protected ImageView segmentationImage;
 
+    @FXML
+    private ComboBox<FilterColection> comboBox;
+    @FXML
+    private ComboBox<SegmentationColection> SegmentationcomboBox;
+
+    private boolean okClicked = false;
+    private ObservableList<FilterColection> comboBoxData = FXCollections.observableArrayList();
+    private ObservableList<SegmentationColection> comboBoxSegmentationData = FXCollections.observableArrayList();
+
+    private String filterType;
+    private String segType;
+
     private Stage stage;
-    private Mat logo;
 
     // the JavaFX file chooser
     private FileChooser fileChooser;
@@ -164,14 +138,6 @@ public class StartController {
     private String dilate;
     private String erode;
 
-    private String rangeFlag;
-    private Integer firstValue;
-    private Integer lastValue;
-    private Integer step;
-
-
-
-
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
@@ -183,9 +149,9 @@ public class StartController {
         comboBoxData.add(new FilterColection("3", "Адаnтивний біл..."));
         comboBoxData.add(new FilterColection("4", "Медіанний"));
 
-        comboBoxSegmentationData.add(new SegmentationColection("1", "Кенні"));
-        comboBoxSegmentationData.add(new SegmentationColection("2", "Собеля"));
-        comboBoxSegmentationData.add(new SegmentationColection("3", "Лапласіан"));
+        comboBoxSegmentationData.add(new SegmentationColection("1", "Порогова"));
+        comboBoxSegmentationData.add(new SegmentationColection("2", "Водорозподілу"));
+        comboBoxSegmentationData.add(new SegmentationColection("3", "k-means"));
 
     }
 
@@ -229,28 +195,28 @@ public class StartController {
 
             this.segType = "1";
 
-            this.SegkSizeField.setDisable(false);
-            this.SegSigma.setDisable(true);
+            this.ValueField.setDisable(false);
+            this.MaxValThresholdField.setDisable(false);
 
             this.SegSigmaColor.setDisable(true);
             this.SegSigmaSpace.setDisable(true);
         }else if(type == "2"){
             this.segType = "2";
 
-            this.SegSigma.setDisable(true);
+            this.MaxValThresholdField.setDisable(true);
             this.SegDelta.setDisable(false);
 
-            this.SegkSizeField.setDisable(true);
+            this.ValueField.setDisable(true);
             this.SegSigmaColor.setDisable(true);
             this.SegSigmaSpace.setDisable(true);
 
         }else if(type == "3"){
             this.segType = "3";
 
-            this.SegkSizeField.setDisable(false);
+            this.ValueField.setDisable(false);
             this.SegDelta.setDisable(false);
 
-            this.SegSigma.setDisable(true);
+            this.MaxValThresholdField.setDisable(true);
             this.SegSigmaColor.setDisable(true);
             this.SegSigmaSpace.setDisable(true);
         }
@@ -356,27 +322,17 @@ public class StartController {
     }
 
     private void setPreProcImage(Mat dst ){
-
         this.preProcImage.setImage(ImageOperations.mat2Image(dst));
-        // set a fixed width
         this.preProcImage.setFitWidth(450.0);
         this.preProcImage.setFitHeight(450.0);
-        // preserve image ratio
         this.preProcImage.setPreserveRatio(true);
     }
 
     private void setSegmentationImage(Mat dst ){
-
         this.segmentationImage.setImage(ImageOperations.mat2Image(dst));
-        // set a fixed width
         this.segmentationImage.setFitWidth(450.0);
         this.segmentationImage.setFitHeight(450.0);
-        // preserve image ratio
         this.segmentationImage.setPreserveRatio(true);
-    }
-
-    public boolean isOkClicked() {
-        return okClicked;
     }
 
     /**
@@ -385,37 +341,14 @@ public class StartController {
     @FXML
     public void handleOk() throws ClassNotFoundException {
 
-        isInputValid();
-        //if (isInputValid()) {
-            //this.setPreProcSettings(researchNameField.getText(), researchPathField.getText(), ContrastField.getText(),
-                   // BrightField.getText(), DilateField.getText(), ErodeField.getText());
-
-
-            //this.ImagePreprocessing();
-        //}
-    }
-
-    /**
-     * Called when the user clicks cancel@FXML
-     * private void handleCancel() {
-     * dialogStage.close();
-     * }
-     * <p>
-     * /**
-     * Validates the user input in the text fields.
-     *
-     * @return true if the input is valid
-     */
-    private boolean isInputValid() {
-        String errorMessage = "";
         PreProcessingParam prparam = new PreProcessingParam();
+        String errorMessage = "";
 
         if (researchNameField.getText() == null || researchNameField.getText().length() == 0) {
             errorMessage += "Заповніть коректно поле Назва досліду!\n";
         }else{
             prparam.setResearchName(researchNameField.getText());
         }
-
 
         if (researchPathField.getText() == null || researchPathField.getText().length() == 0) {
             errorMessage += "Заповніть коректно шлях до теки!\n";
@@ -447,24 +380,14 @@ public class StartController {
             prparam.setErode(ErodeField.getText());
         }
 
-        System.out.println(prparam.getContrast());
-        System.out.println(prparam.getBright());
-        System.out.println(prparam.getDilate());
-        System.out.println(prparam.getErode());
-
-        PreProcessingOperation properation = new PreProcessingOperation(this.image,prparam.getContrast(),
-                prparam.getBright(),
+        // called main function for image processing
+        this.mainImageProcessing(this.image,prparam.getContrast(), prparam.getBright(),
                 prparam.getDilate(),prparam.getErode());
 
 
 
-        //this.ImagePreprocessing();
 
-        this.setPreProcImage(properation.getOutputImage());
-
-        if (errorMessage.length() == 0) {
-            return true;
-        } else {
+        if (errorMessage.length() != 0) {
             // Show the error message.
             Alert alert = new Alert(AlertType.ERROR);
             alert.initOwner(dialogStage);
@@ -472,8 +395,42 @@ public class StartController {
             alert.setHeaderText("Заповніть коректно поля");
             alert.setContentText(errorMessage);
             alert.showAndWait();
-            return false;
+            //return false;
         }
+    }
+
+    /**
+     * mainImageProcessing function
+     * @param inputImg
+     * @param imgCont
+     * @param imgBright
+     * @param imgDilate
+     * @param imgErode
+     */
+    private void mainImageProcessing(Mat inputImg, String imgCont, String imgBright, String imgDilate,
+                                     String imgErode ){
+
+        // called only OpenCV preprocessing functions
+        PreProcessingOperation properation = new PreProcessingOperation(inputImg,imgCont,
+                imgBright, imgDilate,imgErode);
+
+        // called only OpenCV filtering functions
+        FiltersOperations filtroperation = new FiltersOperations(properation.getOutputImage(), this.filterType,
+                kSizeField.getText(), sigmaField.getText(), sigmaSpaceField.getText(), sigmaColorField.getText());
+
+        this.setPreProcImage(filtroperation.getOutputImage());//show image after preprocessing and filtering
+
+        //called only segmentation functions
+        SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), this.segType,
+                ValueField.getText(), MaxValThresholdField.getText());
+
+
+        this.setSegmentationImage(segoperation.getOutputImage());// show image after segmentation
+
+    }
+
+    public boolean isOkClicked() {
+        return okClicked;
     }
 
 
@@ -556,7 +513,7 @@ public class StartController {
         }
 
         this.changedimage = preProcImage;
-        this.setPreProcImage(this.changedimage);
+        //this.setPreProcImage(this.changedimage);
         //this.setSegmentationImage(mHSV);
     }
 

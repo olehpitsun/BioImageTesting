@@ -15,4 +15,13 @@ public class ValidateOperations {
             return false;
         }
     }
+
+    public static String filterAndSegValidate(String param){
+        if(param.length()==0 || ValidateOperations.isInt(param) == false ){
+            param ="3";
+        }else{
+            param=param;
+        }
+        return param;
+    }
 }

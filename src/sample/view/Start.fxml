@@ -13,8 +13,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.image.ImageView?>
 
 <AnchorPane prefHeight="363.0" prefWidth="693.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.StartController">
     <children>
@@ -139,28 +137,20 @@
                             </items>
                         </ComboBox>
 
-                        <Label text="kSize: " GridPane.columnIndex="0" GridPane.rowIndex="7" />
-                        <Label fx:id="SegkSizeLabel" text="sigma" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+                        <Label text="Value: " GridPane.columnIndex="0" GridPane.rowIndex="7" />
+                        <Label fx:id="MaxValThresholdLabel" text="MaxValThreshold" GridPane.columnIndex="0" GridPane.rowIndex="8" />
                         <Label text="SigmaColor" GridPane.columnIndex="0" GridPane.rowIndex="9" />
                         <Label text="sigmaSpace" GridPane.columnIndex="0" GridPane.rowIndex="10" />
                         <Label text="delta" GridPane.columnIndex="0" GridPane.rowIndex="11" />
 
-                        <TextField fx:id="SegkSizeField" GridPane.columnIndex="1" GridPane.rowIndex="7" disable="true"/>
-                        <TextField fx:id="SegSigma" GridPane.columnIndex="1" GridPane.rowIndex="8" disable="true" />
+                        <TextField fx:id="ValueField" GridPane.columnIndex="1" GridPane.rowIndex="7" disable="true"/>
+                        <TextField fx:id="MaxValThresholdField" GridPane.columnIndex="1" GridPane.rowIndex="8" disable="true" />
                         <TextField fx:id="SegSigmaColor" GridPane.columnIndex="1" GridPane.rowIndex="9" disable="true"/>
                         <TextField fx:id="SegSigmaSpace" GridPane.columnIndex="1" GridPane.rowIndex="10" disable="true"/>
                         <TextField fx:id="SegDelta" GridPane.columnIndex="1" GridPane.rowIndex="11" disable="true"/>
 
                     </children>
                 </GridPane>
-
-
-
-
-
-
-
-
             </AnchorPane>
             </items>
         </SplitPane>

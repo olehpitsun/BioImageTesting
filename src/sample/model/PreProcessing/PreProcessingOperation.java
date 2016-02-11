@@ -1,6 +1,12 @@
 package sample.model.PreProcessing;
 
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfFloat;
+import org.opencv.core.MatOfInt;
+import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by oleh on 11.02.16.
@@ -32,5 +38,44 @@ public class PreProcessingOperation {
 
     public Mat getOutputImage(){
         return outputImage;
+    }
+
+    /**
+     * Get the average hue value of the image starting from its Hue channel
+     * histogram
+     *
+     * @param hsvImg
+     *            the current frame in HSV
+     * @param hueValues
+     *            the Hue component of the current frame
+     * @return the average Hue value
+     */
+    public static double getHistAverage(Mat hsvImg, Mat hueValues)
+    {
+        // init
+        double average = 0.0;
+        Mat hist_hue = new Mat();
+        // 0-180: range of Hue values
+        MatOfInt histSize = new MatOfInt(180);
+        List<Mat> hue = new ArrayList<>();
+        hue.add(hueValues);
+
+        // compute the histogram
+        Imgproc.calcHist(hue, new MatOfInt(0), new Mat(), hist_hue, histSize, new MatOfFloat(0, 179));
+
+        // get the average Hue value of the image
+        // (sum(bin(h)*h))/(image-height*image-width)
+        // -----------------
+        // equivalent to get the hue of each pixel in the image, add them, and
+        // divide for the image size (height and width)
+        for (int h = 0; h < 180; h++)
+        {
+            // for each bin, get its value and multiply it for the corresponding
+            // hue
+            average += (hist_hue.get(h, 0)[0] * h);
+        }
+
+        // return the average hue of the image
+        return average = average / hsvImg.size().height / hsvImg.size().width;
     }
 }

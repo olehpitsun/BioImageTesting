@@ -4,6 +4,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
 import org.opencv.imgproc.Imgproc;
+import sample.tools.ValidateOperations;
+import sample.util.PreProcessingParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,27 +19,56 @@ public class PreProcessingOperation {
 
     public PreProcessingOperation(Mat inputImage, String contrast, String bright, String dilate, String erode){
 
-        outputImage = inputImage;
+        this.outputImage = inputImage;
+        PreProcessingParam prparam = new PreProcessingParam();
+
+        if (contrast.length() == 0 || ValidateOperations.isInt(contrast) == false) {
+            prparam.setContrast(null);
+        }else{
+            prparam.setContrast(contrast);
+        }
+
+        if (bright.length() == 0 || ValidateOperations.isInt(bright) == false) {
+            prparam.setBright(null);
+        }else{
+            prparam.setBright(bright);
+        }
+
+        if ( dilate.length() == 0 || ValidateOperations.isInt(dilate) == false) {
+            prparam.setDilate(null);
+        }else{
+            prparam.setDilate(dilate);
+        }
+
+        if (erode.length() == 0 || ValidateOperations.isInt(erode) == false) {
+            prparam.setErode(null);
+        }else{
+            prparam.setErode(erode);
+        }
+        this.setPreProcValue(prparam.getContrast(),prparam.getBright(),prparam.getDilate(),prparam.getErode());
+    }
+
+    public void setPreProcValue(String contrast, String bright, String dilate, String erode){
 
         if(contrast != null) {
-            outputImage = PreProcessing.contrast(outputImage, Integer.parseInt(contrast));
+            outputImage = PreProcessing.contrast(this.outputImage, Integer.parseInt(contrast));
         }
 
         if(bright != null){
-            outputImage = PreProcessing.contrast(outputImage, Integer.parseInt(contrast));
+            outputImage = PreProcessing.contrast(this.outputImage, Integer.parseInt(contrast));
         }
 
         if(dilate != null){
-            outputImage = PreProcessing.Dilate(outputImage,Integer.parseInt(dilate));
+            outputImage = PreProcessing.Dilate(this.outputImage,Integer.parseInt(dilate));
         }
 
         if(erode != null){
-            outputImage = PreProcessing.Erode(outputImage,Integer.parseInt(erode));
+            outputImage = PreProcessing.Erode(this.outputImage,Integer.parseInt(erode));
         }
     }
 
     public Mat getOutputImage(){
-        return outputImage;
+        return this.outputImage;
     }
 
     /**

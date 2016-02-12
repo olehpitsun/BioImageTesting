@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import org.opencv.highgui.Highgui;
+import org.opencv.imgproc.Imgproc;
 import sample.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,14 +30,10 @@ import sample.model.Segmentation.SegmentationColection;
 import sample.model.Segmentation.SegmentationOperations;
 import sample.tools.ImageOperations;
 import sample.tools.ValidateOperations;
+import sample.util.Estimate;
 import sample.util.PreProcessingParam;
 
 public class StartController {
-
-
-
-
-
 
     @FXML
     private Button researchNameButton;
@@ -46,6 +43,11 @@ public class StartController {
     private Button loadImageButton;
     @FXML
     private Button setPreProcSettingsButton;
+    @FXML
+    private Button saveChangeButton;
+    @FXML
+    private Button correctionButton;
+
     @FXML
     private TextField researchNameField;
 
@@ -99,6 +101,10 @@ public class StartController {
     private Label sigmaColorLabel;
     @FXML
     private Label igmaSpaceLabel;
+    @FXML
+    private Label HistAverLabel;
+    @FXML
+    private Label HistAverValueLabel;
 
     @FXML
     protected ImageView preProcImage;
@@ -285,6 +291,7 @@ public class StartController {
             // show the image
             this.setPreProcImage(newImage);
 
+            saveChangeButton.setVisible(true);
             ContrastLabel.setVisible(true);
             ContrastField.setVisible(true);
             ContrastField.setText("10");
@@ -333,6 +340,7 @@ public class StartController {
         this.segmentationImage.setFitWidth(450.0);
         this.segmentationImage.setFitHeight(450.0);
         this.segmentationImage.setPreserveRatio(true);
+        this.correctionButton.setVisible(true);
     }
 
     /**
@@ -355,37 +363,8 @@ public class StartController {
         }else{
             prparam.setResearchPath(researchPathField.getText());
         }
-
-        if (ContrastField.getText().length() == 0 || ValidateOperations.isInt(ContrastField.getText()) == false) {
-            prparam.setContrast(null);
-        }else{
-            prparam.setContrast(ContrastField.getText());
-        }
-
-        if (BrightField.getText().length() == 0 || ValidateOperations.isInt(BrightField.getText()) == false) {
-            prparam.setBright(null);
-        }else{
-            prparam.setBright(BrightField.getText());
-        }
-
-        if ( DilateField.getText().length() == 0 || ValidateOperations.isInt(DilateField.getText()) == false) {
-            prparam.setDilate(null);
-        }else{
-            prparam.setDilate(DilateField.getText());
-        }
-
-        if (ErodeField.getText().length() == 0 || ValidateOperations.isInt(ErodeField.getText()) == false) {
-            prparam.setErode(null);
-        }else{
-            prparam.setErode(ErodeField.getText());
-        }
-
         // called main function for image processing
-        this.mainImageProcessing(this.image,prparam.getContrast(), prparam.getBright(),
-                prparam.getDilate(),prparam.getErode());
-
-
-
+        this.mainImageProcessing();
 
         if (errorMessage.length() != 0) {
             // Show the error message.
@@ -401,18 +380,13 @@ public class StartController {
 
     /**
      * mainImageProcessing function
-     * @param inputImg
-     * @param imgCont
-     * @param imgBright
-     * @param imgDilate
-     * @param imgErode
+     *
      */
-    private void mainImageProcessing(Mat inputImg, String imgCont, String imgBright, String imgDilate,
-                                     String imgErode ){
+    private void mainImageProcessing(){
 
         // called only OpenCV preprocessing functions
-        PreProcessingOperation properation = new PreProcessingOperation(inputImg,imgCont,
-                imgBright, imgDilate,imgErode);
+        PreProcessingOperation properation = new PreProcessingOperation(this.image,ContrastField.getText(),
+                BrightField.getText(), DilateField.getText(),ErodeField.getText());
 
         // called only OpenCV filtering functions
         FiltersOperations filtroperation = new FiltersOperations(properation.getOutputImage(), this.filterType,
@@ -421,11 +395,23 @@ public class StartController {
         this.setPreProcImage(filtroperation.getOutputImage());//show image after preprocessing and filtering
 
         //called only segmentation functions
-        SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), this.segType,
-                ValueField.getText(), MaxValThresholdField.getText());
+        if(segType =="1"){
+            SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), this.segType,
+                    ValueField.getText(), MaxValThresholdField.getText());
+
+            SegmentationOperations segoperation_1 = new SegmentationOperations(segoperation.getOutputImage(), this.segType,
+                    ValueField.getText(), MaxValThresholdField.getText());
+            this.setSegmentationImage(segoperation_1.getOutputImage());// show image after segmentation
+            this.changedimage = segoperation_1.getOutputImage();
+        }else{
+            SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), this.segType,
+                    ValueField.getText(), MaxValThresholdField.getText());
+            this.setSegmentationImage(segoperation.getOutputImage());// show image after segmentation
+            this.changedimage = segoperation.getOutputImage();
+        }
 
 
-        this.setSegmentationImage(segoperation.getOutputImage());// show image after segmentation
+
 
     }
 
@@ -433,91 +419,9 @@ public class StartController {
         return okClicked;
     }
 
-
-
-
-
-
-    private void ImagePreprocessing(){
-
-        Mat preProcImage = new Mat();
-
-        // Contrat Unit
-        preProcImage = this.image;
-
-
-        //preProcImage = PreProcessing.contrast(preProcImage,Integer.parseInt(this.contrast));
-
-        //Bright Unit
-        //preProcImage = PreProcessing.contrast(preProcImage,Integer.parseInt(this.bright));
-
-        //Dilate Unit
-        //preProcImage = PreProcessing.Dilate(preProcImage,Integer.parseInt(this.dilate));
-
-        //Erode Unit
-        //preProcImage = PreProcessing.Erode(preProcImage, Integer.parseInt(this.erode));
-
-        /*if(this.filterType == "1") {
-            preProcImage = Filters.gaussianBlur(preProcImage, Integer.parseInt(kSizeField.getText()),
-                    Double.parseDouble(sigmaField.getText()) );
-        }
-        if(this.filterType == "2"){
-            preProcImage = Filters.bilateralFilter(preProcImage, Integer.parseInt(kSizeField.getText()),
-                    Double.parseDouble(sigmaSpaceField.getText()), Double.parseDouble(sigmaColorField.getText()));
-        }
-        if(this.filterType == "3"){
-            int sP = Integer.valueOf(sigmaSpaceField.getText());
-            preProcImage = Filters.adaptiveBilateralFilter(preProcImage, Integer.parseInt(kSizeField.getText()), sP);
-        }
-        if(this.filterType == "4"){
-            preProcImage = Filters.medianBlur(preProcImage,Integer.parseInt(kSizeField.getText()));
-        }
-*/
-
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////////////
-/*
-        Mat mHSV = new Mat();
-
-        Imgproc.cvtColor(preProcImage, mHSV, Imgproc.COLOR_RGBA2RGB,3);
-        Imgproc.cvtColor(preProcImage, mHSV, Imgproc.COLOR_RGB2HSV,3);
-        List<Mat> hsv_planes = new ArrayList<Mat>(3);
-        Core.split(mHSV, hsv_planes);
-
-
-
-        Mat channel = hsv_planes.get(2);
-        channel = Mat.zeros(mHSV.rows(),mHSV.cols(),CvType.CV_8UC1);
-        hsv_planes.set(2,channel);
-        Core.merge(hsv_planes,mHSV);
-
-
-
-        Mat clusteredHSV = new Mat();
-        mHSV.convertTo(mHSV, CvType.CV_32FC3);
-        TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.MAX_ITER,100,0.1);
-        Core.kmeans(mHSV, 2, clusteredHSV, criteria, 10, Core.KMEANS_PP_CENTERS);
-*/
-
-
-        if(this.segType == "1") {
-            //this.cannyDetection(Integer.parseInt(kSizeField.getText()));
-        }
-        if(this.segType == "2"){
-            //this.SobelDetection(Integer.parseInt(delta.getText()));
-        }
-        if(this.segType == "3"){
-            //this.Laplacian(Integer.parseInt(kSizeField.getText()), Integer.parseInt(delta.getText()));
-        }
-
-        this.changedimage = preProcImage;
-        //this.setPreProcImage(this.changedimage);
-        //this.setSegmentationImage(mHSV);
-    }
-
-
+    /**
+     * Filter ComboBox listener
+     */
     @FXML
     private void handleComboBoxAction() {
         FilterColection selectedFilter = comboBox.getSelectionModel().getSelectedItem();
@@ -560,8 +464,6 @@ public class StartController {
         }
     }
 
-
-
     @FXML
     private void handleDBConnect() {
 
@@ -572,6 +474,60 @@ public class StartController {
         }
     }
 
+    @FXML
+    private void saveChangeImage(){
+        sample.model.Image.setImageMat(this.changedimage);
+        this.image = sample.model.Image.getImageMat();
+    }
+
+    @FXML
+    private void correctionSegmentation(){
+        Mat frame = this.image;
+        //Imgproc.dilate(frame, frame, new Mat(), new Point(-1, -1), 1);
+
+        Mat hsvImg = new Mat();
+        List<Mat> hsvPlanes = new ArrayList<>();
+        Mat thresholdImg = new Mat();
+
+        int thresh_type = Imgproc.THRESH_BINARY_INV;
+        //if (this.inverse.isSelected())
+        // thresh_type = Imgproc.THRESH_BINARY;
+
+        // threshold the image with the average hue value
+        hsvImg.create(frame.size(), CvType.CV_8U);
+        Imgproc.cvtColor(frame, hsvImg, Imgproc.COLOR_BGR2HSV);
+        Core.split(hsvImg, hsvPlanes);
+
+        // get the average hue value of the image
+        double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
+        System.out.print(threshValue);
+        //Imgproc.threshold(hsvPlanes.get(0), thresholdImg, 0.1, 255 , thresh_type);
+        Imgproc.threshold(thresholdImg, thresholdImg, 1, 179, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
+
+        Imgproc.erode(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 1);
+
+        //Imgproc.blur(thresholdImg, thresholdImg, new Size(9, 9));
+
+
+
+        // dilate to fill gaps, erode to smooth edges
+        Imgproc.dilate(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 3);
+        //Imgproc.erode(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 3);
+
+        Size s = new Size(31, 31);
+        Imgproc.GaussianBlur(thresholdImg, thresholdImg, s, 2.0);
+
+        //Imgproc.threshold(thresholdImg, thresholdImg, 0.1, 255, Imgproc.THRESH_BINARY);
+        Imgproc.threshold(thresholdImg, thresholdImg, 0, 255, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
+
+        // create the new image
+        Mat foreground = new Mat(frame.size(), CvType.CV_8UC3, new Scalar(255, 255, 255));
+        frame.copyTo(foreground, thresholdImg);
+        Imgproc.medianBlur(foreground, foreground, 9);
+
+        this.setSegmentationImage(foreground);// show image after segmentation
+        //this.changedimage = foreground;
+    }
 /*
     @FXML
     public void saveChangeFile()throws

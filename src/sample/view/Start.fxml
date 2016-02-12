@@ -48,7 +48,6 @@
 
                                 <Button fx:id="loadImageButton" mnemonicParsing="false" onAction="#chooseFile" text="Завантажити зображення" visible="false" GridPane.rowIndex="5" />
 
-
                                 <Label fx:id="firstNameLabel" styleClass="label-bright" text="" GridPane.columnIndex="1" />
                                 <Button fx:id="researchNameButton" defaultButton="true" minWidth="63.0" mnemonicParsing="false" onAction="#setResearchName" prefHeight="28.0" prefWidth="63.0" text="OK" visible="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
@@ -66,8 +65,8 @@
                                 <Label fx:id="ErodeLabel" styleClass="label-bright" text="Erode" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="9" />
                                 <TextField fx:id="ErodeField" prefHeight="30.0" prefWidth="125.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="9" />
 
-                                <Button fx:id="setPreProcSettingsButton" mnemonicParsing="false" onAction="#handleOk" text="OK" visible="false" GridPane.rowIndex="10" />
-
+                                <Label fx:id="HistAverLabel"  text="Сер. знач. гістограми" GridPane.columnIndex="0" GridPane.rowIndex="12" visible="false" />
+                                <Label fx:id="HistAverValueLabel"  text="" GridPane.columnIndex="1" GridPane.rowIndex="12" visible="true" />
 
                             </children>
                         </GridPane>
@@ -148,6 +147,11 @@
                         <TextField fx:id="SegSigmaColor" GridPane.columnIndex="1" GridPane.rowIndex="9" disable="true"/>
                         <TextField fx:id="SegSigmaSpace" GridPane.columnIndex="1" GridPane.rowIndex="10" disable="true"/>
                         <TextField fx:id="SegDelta" GridPane.columnIndex="1" GridPane.rowIndex="11" disable="true"/>
+
+                        <Button fx:id="correctionButton" mnemonicParsing="false" onAction="#correctionSegmentation" text="Корекція" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="13" />
+
+                        <Button fx:id="setPreProcSettingsButton" defaultButton="true" mnemonicParsing="false" onAction="#handleOk" text="OK" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="15" />
+                        <Button fx:id="saveChangeButton" defaultButton="true" mnemonicParsing="false" onAction="#saveChangeImage" text="Зберегти зміни" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="15" />
 
                     </children>
                 </GridPane>

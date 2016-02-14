@@ -55,7 +55,7 @@ public class PreProcessingOperation {
         }
 
         if(bright != null){
-            outputImage = PreProcessing.contrast(this.outputImage, Integer.parseInt(contrast));
+            outputImage = PreProcessing.bright(this.outputImage, Integer.parseInt(bright));
         }
 
         if(dilate != null){

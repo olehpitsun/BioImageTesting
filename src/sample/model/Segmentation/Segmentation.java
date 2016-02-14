@@ -110,8 +110,18 @@ public class Segmentation {
         // get the average hue value of the image
         double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
         System.out.println(threshValue);
+/*
+        if(threshValue > 40){
+            maxValue = 160;
+        }else{
+            maxValue = 40;
+        }*/
 
-        Imgproc.threshold(hsvPlanes.get(1), thresholdImg, threshValue + minValue, maxValue, thresh_type);
+        Imgproc.threshold(hsvPlanes.get(1), thresholdImg, threshValue + minValue , 255 , thresh_type);
+
+
+
+
 
         Imgproc.blur(thresholdImg, thresholdImg, new Size(3, 3));
 
@@ -231,7 +241,7 @@ public class Segmentation {
         TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.MAX_ITER,100,0.1);
         Core.kmeans(mHSV, 2, clusteredHSV, criteria, 10, Core.KMEANS_PP_CENTERS);
 
-        Imgproc.threshold(mHSV,mHSV, 0, 155, Imgproc.THRESH_BINARY );
+        Imgproc.threshold(mHSV,mHSV, 0, 220, Imgproc.THRESH_BINARY );
         mHSV.convertTo(mHSV, CvType.CV_8UC3);
         return mHSV;
     }

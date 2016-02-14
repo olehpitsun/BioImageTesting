@@ -1,19 +1,47 @@
 package sample.model.PreProcessing;
 
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.Size;
+import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by oleh on 02.01.16.
  */
 public class PreProcessing {
 
-    public static Mat contrast(Mat image, int sz){
+    public static Mat contrast (Mat image, Integer a){
+        Scalar modifier;
+
+        double amt = 1.2;
+        modifier = new Scalar(0.9,0.9,1.3,1);
+        Core.multiply(image, modifier, image);
+        return image;
+    }
+
+    public static Mat bright(Mat image, int sz){
 
         Mat dst = new Mat(image.rows(), image.cols(), image.type());
         image.convertTo(dst, -1, 10d * sz / 100, 0);
+
+        Mat hsvImg = new Mat();
+        List<Mat> hsvPlanes = new ArrayList<>();
+        Mat thresholdImg = new Mat();
+
+        int thresh_type = Imgproc.THRESH_BINARY_INV;
+
+        //if (this.inverse.isSelected())
+        //thresh_type = Imgproc.THRESH_BINARY;
+
+        // threshold the image with the average hue value
+        hsvImg.create(image.size(), CvType.CV_8U);
+        Imgproc.cvtColor(image, hsvImg, Imgproc.COLOR_BGR2HSV);
+        Core.split(hsvImg, hsvPlanes);
+        // get the average hue value of the image
+        double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
+        System.out.println("After preproc" + threshValue);
+
         return dst;
     }
 

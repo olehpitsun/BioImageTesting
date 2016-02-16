@@ -91,7 +91,7 @@ public class Segmentation {
         //Core.bitwise_not(frame,frame );
 
         //Mat frame = new Mat(image.rows(), image.cols(), image.type());
-        frame.convertTo(frame, -1, 10d * 20 / 100, 0);
+        frame.convertTo(frame, -1, 10d * 25 / 100, 0);
 
         Mat hsvImg = new Mat();
         List<Mat> hsvPlanes = new ArrayList<>();
@@ -103,6 +103,7 @@ public class Segmentation {
         //thresh_type = Imgproc.THRESH_BINARY;
 
         // threshold the image with the average hue value
+        System.out.println("size " +frame.size());
         hsvImg.create(frame.size(), CvType.CV_8U);
         Imgproc.cvtColor(frame, hsvImg, Imgproc.COLOR_BGR2HSV);
         Core.split(hsvImg, hsvPlanes);
@@ -117,7 +118,7 @@ public class Segmentation {
             maxValue = 40;
         }*/
 
-        Imgproc.threshold(hsvPlanes.get(1), thresholdImg, threshValue + minValue , 255 , thresh_type);
+        Imgproc.threshold(hsvPlanes.get(1), thresholdImg, minValue , maxValue , thresh_type);
 
 
 
@@ -129,7 +130,7 @@ public class Segmentation {
         Imgproc.dilate(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 1);
         Imgproc.erode(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 1);
 
-        Imgproc.threshold(thresholdImg, thresholdImg, threshValue + minValue, minValue, Imgproc.THRESH_BINARY);
+        Imgproc.threshold(thresholdImg, thresholdImg, minValue, maxValue, Imgproc.THRESH_BINARY);
 
         // create the new image
         Mat foreground = new Mat(frame.size(), CvType.CV_8UC3, new Scalar(255, 255, 255));

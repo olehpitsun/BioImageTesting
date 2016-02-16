@@ -152,6 +152,7 @@
 
                         <Button fx:id="setPreProcSettingsButton" defaultButton="true" mnemonicParsing="false" onAction="#handleOk" text="OK" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="15" />
                         <Button fx:id="saveChangeButton" defaultButton="true" mnemonicParsing="false" onAction="#saveChangeImage" text="Зберегти зміни" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+                        <Button fx:id="autoButton" defaultButton="true" mnemonicParsing="false" onAction="#autoSetting" text="Автоматично" visible="true" GridPane.columnIndex="1" GridPane.rowIndex="16" />
 
                     </children>
                 </GridPane>

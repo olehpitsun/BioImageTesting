@@ -415,6 +415,80 @@ public class StartController {
 
     }
 
+    @FXML
+    public void autoSetting(){
+
+        String contrast ="11";
+        String bright ="11";
+        String dilate ="1";
+        String erode="1";
+
+        PreProcessingOperation properation = new PreProcessingOperation(this.image,contrast,
+                bright, dilate,erode);
+
+        // called only OpenCV filtering functions
+        FiltersOperations filtroperation = new FiltersOperations(properation.getOutputImage(), "3",
+                "4", "", "", "");
+        //this.setPreProcImage(filtroperation.getOutputImage());//show image after preprocessing and filtering
+
+
+
+
+
+        SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), "3",
+                ValueField.getText(), MaxValThresholdField.getText());
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        SegmentationOperations segoperation_1 = new SegmentationOperations(segoperation.getOutputImage(), "1",
+                "200", "255");
+
+        SegmentationOperations segoperation_2 = new SegmentationOperations(segoperation_1.getOutputImage(), "1",
+                "220", "255");
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        this.setPreProcImage(segoperation.getOutputImage());
+        this.setSegmentationImage(segoperation_2.getOutputImage());// show image after segmentation
+        this.saveChangeImage();
+/*
+        PreProcessingOperation properation_1 = new PreProcessingOperation(segoperation_2.getOutputImage(),contrast,
+                bright, dilate,erode);
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+        SegmentationOperations segoperation_3 = new SegmentationOperations(properation_1.getOutputImage(), "1",
+                "20", "159");
+
+        SegmentationOperations segoperation_4 = new SegmentationOperations(segoperation_3.getOutputImage(), "1",
+                "0", "149");
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+        PreProcessingOperation properation_2 = new PreProcessingOperation(segoperation_4.getOutputImage(),contrast,
+                bright, dilate,erode);
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        SegmentationOperations segoperation_5 = new SegmentationOperations(properation_2.getOutputImage(), "1",
+                "0", "169");
+
+        SegmentationOperations segoperation_6 = new SegmentationOperations(segoperation_5.getOutputImage(), "1",
+                "50", "229");
+/////////////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+
+
+
+
+        //this.setSegmentationImage(segoperation_2.getOutputImage());// show image after segmentation
+
+    }
+
+
     public boolean isOkClicked() {
         return okClicked;
     }

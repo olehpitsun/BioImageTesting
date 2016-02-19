@@ -23,4 +23,6 @@ public class Image {
         image = newImage;
         return image;
     }
+
+
 }

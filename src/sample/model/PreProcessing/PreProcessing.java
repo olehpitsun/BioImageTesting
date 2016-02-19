@@ -2,19 +2,22 @@ package sample.model.PreProcessing;
 
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
+import sample.util.Estimate;
 
 import java.util.ArrayList;
 import java.util.List;
+import sample.util.Estimate;
 
 /**
  * Created by oleh on 02.01.16.
  */
-public class PreProcessing {
+public class PreProcessing{
+
 
     public static Mat contrast (Mat image, Integer a){
 
 
-        /*Mat hsvImg = new Mat();
+        Mat hsvImg = new Mat();
         List<Mat> hsvPlanes = new ArrayList<>();
         Mat thresholdImg = new Mat();
 
@@ -30,7 +33,9 @@ public class PreProcessing {
 
         // get the average hue value of the image
         double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
-        System.out.println("Value before " +threshValue);*/
+
+       Estimate.setFirstHistAverageValue(threshValue);
+        System.out.println("Value before " +Estimate.getFirstHistAverageValue());
 
 
 
@@ -38,7 +43,7 @@ public class PreProcessing {
 
 
         double amt = 1.2;
-        modifier = new Scalar(0.9,0.9,1.3,1);
+        modifier = new Scalar(0.9,0.9,1.2,1);
         Core.multiply(image, modifier, image);
         return image;
     }
@@ -62,8 +67,8 @@ public class PreProcessing {
         Imgproc.cvtColor(image, hsvImg, Imgproc.COLOR_BGR2HSV);
         Core.split(hsvImg, hsvPlanes);
         // get the average hue value of the image
-        double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
-        System.out.println("After preproc" + threshValue);
+        ///double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
+        //System.out.println("After preproc" + threshValue);
 
         return dst;
     }

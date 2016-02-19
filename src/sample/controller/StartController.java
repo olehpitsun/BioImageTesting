@@ -17,6 +17,7 @@ import sample.core.DB;
 import sample.model.Filters.FilterColection;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sample.model.Filters.FiltersOperations;
+import sample.model.HistogramEQ;
 import sample.model.PreProcessing.PreProcessingOperation;
 import sample.model.Segmentation.SegmentationColection;
 import sample.model.Segmentation.SegmentationOperations;
@@ -148,7 +150,7 @@ public class StartController {
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public StartController() {
+    public StartController(){
 
         comboBoxData.add(new FilterColection("1", "Гаусівський"));
         comboBoxData.add(new FilterColection("2", "Білатеральний"));
@@ -158,6 +160,8 @@ public class StartController {
         comboBoxSegmentationData.add(new SegmentationColection("1", "Порогова"));
         comboBoxSegmentationData.add(new SegmentationColection("2", "Водорозподілу"));
         comboBoxSegmentationData.add(new SegmentationColection("3", "k-means"));
+
+
 
     }
 
@@ -230,7 +234,11 @@ public class StartController {
 
 
     @FXML
-    public void setResearchName(){
+    public void setResearchName() throws IOException{
+
+        //HistogramEQ h = new HistogramEQ();
+
+        //h.main1();
 
         this.researchname = researchNameField.getText();
 
@@ -243,11 +251,13 @@ public class StartController {
     @FXML
     public void setResearchPath(String rsname){
 
+
         File file = new File(rsname);
         String path = file.getAbsolutePath();
 
         researchPathField.setText(path);
         this.researchPath = path;
+
     }
 
     @FXML
@@ -417,13 +427,19 @@ public class StartController {
 
     @FXML
     public void autoSetting(){
+        this.autoPreProcFiltersSegmentationSetting("11","15","1","1");
+    }
 
-        String contrast ="11";
-        String bright ="11";
+    @FXML
+    public void autoPreProcFiltersSegmentationSetting(String contrast, String bright, String dilate, String erode){
+
+        /*String contrast ="11";
+        String bright ="15";
         String dilate ="1";
-        String erode="1";
+        String erode="1";*/
 
-        PreProcessingOperation properation = new PreProcessingOperation(this.image,contrast,
+        Mat d = this.image;
+        PreProcessingOperation properation = new PreProcessingOperation(d,contrast,
                 bright, dilate,erode);
 
         // called only OpenCV filtering functions
@@ -438,17 +454,39 @@ public class StartController {
         SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), "3",
                 ValueField.getText(), MaxValThresholdField.getText());
 
+        filtroperation.getOutputImage().release();
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         SegmentationOperations segoperation_1 = new SegmentationOperations(segoperation.getOutputImage(), "1",
                 "200", "255");
 
-        SegmentationOperations segoperation_2 = new SegmentationOperations(segoperation_1.getOutputImage(), "1",
-                "220", "255");
+        segoperation.getOutputImage().release();
+
+
+        //this.setPreProcImage(this.image);
+        this.checkHistogram();
+
+        //SegmentationOperations segoperation_2 = new SegmentationOperations(segoperation_1.getOutputImage(), "1",
+          //      "220", "255");
+
+        //segoperation_1.getOutputImage().release();
+
+
+
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        this.setPreProcImage(segoperation.getOutputImage());
-        this.setSegmentationImage(segoperation_2.getOutputImage());// show image after segmentation
-        this.saveChangeImage();
+        //this.setPreProcImage(segoperation.getOutputImage());
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+        //this.setSegmentationImage(segoperation_2.getOutputImage());// show image after segmentation
+
+        //this.saveChangeImage();
 /*
         PreProcessingOperation properation_1 = new PreProcessingOperation(segoperation_2.getOutputImage(),contrast,
                 bright, dilate,erode);
@@ -487,6 +525,109 @@ public class StartController {
         //this.setSegmentationImage(segoperation_2.getOutputImage());// show image after segmentation
 
     }
+
+    public Integer count = 0;
+    public void checkHistogram(){
+       // if(count != 1){
+
+       // }else{
+            count ++;
+            System.out.println("Res " + Estimate.checkHistogramValues());
+
+            if(Estimate.checkHistogramValues() == true){
+                System.out.println("??????????????????????????????????????????????????????????????????????????????????????????");
+
+                if(Estimate.getSecondHistAverageValue() >35 && Estimate.getSecondHistAverageValue()<41){
+                    this.auto("11", "15","1","2");
+                }
+                if(Estimate.getSecondHistAverageValue() >42 && Estimate.getSecondHistAverageValue()<51){
+                    this.auto("11", "5","1","1");
+                }
+                if(Estimate.getSecondHistAverageValue() >52){
+                    this.auto("11", "15","1","1");
+                }
+                else{
+                    this.auto("11", "15","1","1");
+                }
+
+
+
+
+
+            }else{
+                System.out.println("//////////////////////////////////////////////////////////////////////////////////////////");
+
+                if(Estimate.getSecondHistAverageValue() >110){
+                    this.auto("11", "22","3","1");
+
+                }else{
+                    this.auto("11", "9","1","1");
+
+                }
+
+            }
+       // }
+
+    }
+
+    @FXML
+    public void auto(String contrast, String bright, String dilate, String erode){
+
+        /*String contrast ="11";
+        String bright ="15";
+        String dilate ="1";
+        String erode="1";*/
+        //this.setSegmentationImage(this.image);
+        this.image = sample.model.Image.getImageMat();
+
+
+
+        PreProcessingOperation properation = new PreProcessingOperation(this.image,contrast,
+                bright, dilate,erode);
+
+        // called only OpenCV filtering functions
+        FiltersOperations filtroperation = new FiltersOperations(properation.getOutputImage(), "3",
+                "4", "", "", "");
+        //this.setPreProcImage(filtroperation.getOutputImage());//show image after preprocessing and filtering
+
+
+
+
+
+        SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), "3",
+                ValueField.getText(), MaxValThresholdField.getText());
+
+        filtroperation.getOutputImage().release();
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        SegmentationOperations segoperation_1 = new SegmentationOperations(segoperation.getOutputImage(), "1",
+                "200", "255");
+
+        segoperation.getOutputImage().release();
+
+
+        //this.checkHistogram();
+
+        SegmentationOperations segoperation_2 = new SegmentationOperations(segoperation_1.getOutputImage(), "1",
+                "220", "255");
+
+        segoperation_1.getOutputImage().release();
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //this.setPreProcImage(segoperation.getOutputImage());
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+        this.setSegmentationImage(segoperation_2.getOutputImage());// show image after segmentation
+
+        this.saveChangeImage();
+
+    }
+
+
+
+
 
 
     public boolean isOkClicked() {

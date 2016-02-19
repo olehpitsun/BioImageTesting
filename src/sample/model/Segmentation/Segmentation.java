@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by oleh on 02.01.16.
  */
-public class Segmentation {
+public class Segmentation{
 
     /**
      *
@@ -91,7 +91,11 @@ public class Segmentation {
         //Core.bitwise_not(frame,frame );
 
         //Mat frame = new Mat(image.rows(), image.cols(), image.type());
-        frame.convertTo(frame, -1, 10d * 25 / 100, 0);
+
+            frame.convertTo(frame, -1, 10d * 20 / 100, 0);
+
+
+
 
         Mat hsvImg = new Mat();
         List<Mat> hsvPlanes = new ArrayList<>();
@@ -103,14 +107,14 @@ public class Segmentation {
         //thresh_type = Imgproc.THRESH_BINARY;
 
         // threshold the image with the average hue value
-        System.out.println("size " +frame.size());
+        //System.out.println("size " +frame.size());
         hsvImg.create(frame.size(), CvType.CV_8U);
         Imgproc.cvtColor(frame, hsvImg, Imgproc.COLOR_BGR2HSV);
         Core.split(hsvImg, hsvPlanes);
 
         // get the average hue value of the image
-        double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
-        System.out.println(threshValue);
+        //double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
+        //System.out.println(threshValue);
 /*
         if(threshValue > 40){
             maxValue = 160;
@@ -124,7 +128,7 @@ public class Segmentation {
 
 
 
-        Imgproc.blur(thresholdImg, thresholdImg, new Size(3, 3));
+        Imgproc.blur(thresholdImg, thresholdImg, new Size(27, 27));
 
         // dilate to fill gaps, erode to smooth edges
         Imgproc.dilate(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 1);
@@ -137,6 +141,15 @@ public class Segmentation {
         Core.bitwise_not(thresholdImg,foreground);
 
         frame.copyTo(foreground, thresholdImg);
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+        ///
+        ////
+
+
+
+
+
 
         return foreground;
         /*Mat hsvImg = new Mat();
@@ -226,7 +239,36 @@ public class Segmentation {
         Mat mHSV = new Mat();
 
         // яскравість
-        rgba.convertTo(rgba , -1, 10d * 30 / 100, 0);
+
+        if(Estimate.getFirstHistAverageValue() !=null && Estimate.getSecondHistAverageValue()!=null &&
+                Estimate.checkHistogramValues() == false) {
+            System.out.println( "Bsd");
+            if(Estimate.getSecondHistAverageValue() >110){
+                rgba.convertTo(rgba, -1, 10d * 17 / 100, 0);
+            }else{
+                rgba.convertTo(rgba, -1, 10d * 5 / 100, 0);
+            }
+
+
+
+
+
+
+
+
+        }else {
+
+            /*
+            if( Estimate.getSecondHistAverageValue()!=null && Estimate.getSecondHistAverageValue() >= 53){
+                System.out.println("URA");
+                rgba.convertTo(rgba, -1, 10d * 38 / 100, 0);
+            }else{*/
+                rgba.convertTo(rgba, -1, 10d * 18 / 100, 0);
+            //}
+
+            System.out.println( "Good");
+
+        }
         Imgproc.cvtColor(rgba, mHSV, Imgproc.COLOR_RGBA2RGB,3);
         Imgproc.cvtColor(rgba, mHSV, Imgproc.COLOR_RGB2HSV,3);
         List<Mat> hsv_planes = new ArrayList<Mat>(3);
@@ -240,10 +282,64 @@ public class Segmentation {
         Mat clusteredHSV = new Mat();
         mHSV.convertTo(mHSV, CvType.CV_32FC3);
         TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.MAX_ITER,100,0.1);
-        Core.kmeans(mHSV, 2, clusteredHSV, criteria, 10, Core.KMEANS_PP_CENTERS);
+        Core.kmeans(mHSV, 1, clusteredHSV, criteria, 20, Core.KMEANS_PP_CENTERS);
 
-        Imgproc.threshold(mHSV,mHSV, 0, 220, Imgproc.THRESH_BINARY );
+        mHSV.convertTo(mHSV, CvType.CV_8UC1);
+        mHSV = Histogram(mHSV);
+
+
+
+
+
+
+
+        Mat hsvImg = new Mat();
+        List<Mat> hsvPlanes = new ArrayList<>();
+        Mat thresholdImg = new Mat();
+        int thresh_type = Imgproc.THRESH_BINARY_INV;
+        hsvImg.create(mHSV.size(), CvType.CV_8U);
+        Imgproc.cvtColor(mHSV, hsvImg, Imgproc.COLOR_BGR2HSV);
+        Core.split(hsvImg, hsvPlanes);
+        Imgproc.threshold(hsvPlanes.get(1), thresholdImg, 0 , 200 , thresh_type);
+
+        double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
+
+        Estimate.setSecondHistAverageValue(threshValue);
+        System.out.println ( "Fdter " + Estimate.getSecondHistAverageValue());
+
+
+
+
+        Imgproc.threshold(mHSV,mHSV, threshValue, 200, Imgproc.THRESH_BINARY );
         mHSV.convertTo(mHSV, CvType.CV_8UC3);
         return mHSV;
     }
+
+
+
+    public static Mat Histogram(Mat im){
+
+        Mat img = im;
+
+        Mat equ = new Mat();
+        img.copyTo(equ);
+        Imgproc.blur(equ, equ, new Size(3, 3));
+
+        Imgproc.cvtColor(equ, equ, Imgproc.COLOR_BGR2YCrCb);
+        List<Mat> channels = new ArrayList<Mat>();
+        Core.split(equ, channels);
+        Imgproc.equalizeHist(channels.get(0), channels.get(0));
+        Core.merge(channels, equ);
+        Imgproc.cvtColor(equ, equ, Imgproc.COLOR_YCrCb2BGR);
+
+        Mat gray = new Mat();
+        Imgproc.cvtColor(equ, gray, Imgproc.COLOR_BGR2GRAY);
+        Mat grayOrig = new Mat();
+        Imgproc.cvtColor(img, grayOrig, Imgproc.COLOR_BGR2GRAY);
+
+        return img;
+
+
+    }
+
 }

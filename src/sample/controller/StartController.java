@@ -537,6 +537,13 @@ public class StartController {
             if(Estimate.checkHistogramValues() == true){
                 System.out.println("??????????????????????????????????????????????????????????????????????????????????????????");
 
+
+                if(Estimate.getSecondHistAverageValue() >12 && Estimate.getSecondHistAverageValue()<=20){
+                    this.auto("11", "15","1","10");
+                }
+                if(Estimate.getSecondHistAverageValue() >20 && Estimate.getSecondHistAverageValue()<32){
+                    this.auto("11", "16","3","1");
+                }
                 if(Estimate.getSecondHistAverageValue() >35 && Estimate.getSecondHistAverageValue()<41){
                     this.auto("11", "15","1","2");
                 }
@@ -557,10 +564,27 @@ public class StartController {
             }else{
                 System.out.println("//////////////////////////////////////////////////////////////////////////////////////////");
 
-                if(Estimate.getSecondHistAverageValue() >110){
-                    this.auto("11", "22","3","1");
 
-                }else{
+
+                if(Estimate.getSecondHistAverageValue() > 58 && Estimate.getSecondHistAverageValue() < 68){
+                    this.auto("11", "5","2","1");
+                }
+                if(Estimate.getSecondHistAverageValue() >110 && Estimate.getSecondHistAverageValue() <= 140){
+                    this.auto("11", "22","2","1");
+
+                }
+                if(Estimate.getSecondHistAverageValue() >140 && Estimate.getSecondHistAverageValue() < 149){
+                    this.auto("11", "11","1","5");
+
+                }
+
+                if(Estimate.getSecondHistAverageValue() >= 149){
+                    this.auto("11", "9","1","1");
+
+                }
+
+
+                else{
                     this.auto("11", "9","1","1");
 
                 }

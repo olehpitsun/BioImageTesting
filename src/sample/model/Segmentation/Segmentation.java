@@ -243,9 +243,13 @@ public class Segmentation{
         if(Estimate.getFirstHistAverageValue() !=null && Estimate.getSecondHistAverageValue()!=null &&
                 Estimate.checkHistogramValues() == false) {
             System.out.println( "Bsd");
-            if(Estimate.getSecondHistAverageValue() >110){
+            if(Estimate.getSecondHistAverageValue() >110 && Estimate.getSecondHistAverageValue() < 145){
                 rgba.convertTo(rgba, -1, 10d * 17 / 100, 0);
-            }else{
+            }
+
+
+
+            else{
                 rgba.convertTo(rgba, -1, 10d * 5 / 100, 0);
             }
 
@@ -257,6 +261,7 @@ public class Segmentation{
 
 
         }else {
+
 
             /*
             if( Estimate.getSecondHistAverageValue()!=null && Estimate.getSecondHistAverageValue() >= 53){

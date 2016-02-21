@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.view.RootLayoutController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.RootLayoutController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -23,6 +23,12 @@
 
                </items>
           </Menu>
+
+            <Menu mnemonicParsing="false" text="Обробка">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#handlePreProc" text="Попередня обр."/>
+                </items>
+            </Menu>
 
 
         </menus>

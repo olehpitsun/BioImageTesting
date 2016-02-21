@@ -14,8 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
+import sample.controller.PreProcessingController;
+import sample.controller.RootLayoutController;
 import sample.controller.StartController;
-import sample.view.*;
 
 public class Main extends Application {
 
@@ -157,5 +158,29 @@ public class Main extends Application {
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         launch(args);
+    }
+
+
+    /**
+     * Show preProccessing page
+     */
+    public void showPreprocessing() {
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("view/PreProccessing.fxml"));
+            AnchorPane PreProcessing = (AnchorPane) loader.load();
+
+            // Set person overview into the center of root layout.
+            rootLayout.setCenter(PreProcessing);
+
+            // Give the controller access to the main app.
+            PreProcessingController controller = loader.getController();
+            controller.setMainApp(this);
+            //controller.setPerson(rdbcData);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

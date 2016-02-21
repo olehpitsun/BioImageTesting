@@ -1,4 +1,4 @@
-package sample.view;
+package sample.controller;
 
 import sample.model.Image;
 import javafx.event.ActionEvent;
@@ -89,6 +89,11 @@ public class RootLayoutController {
         String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
         Highgui.imwrite( path + timeStamp + ".png", Image.getImageMat());
 
+    }
+
+    @FXML
+    private void handlePreProc(){
+        mainApp.showPreprocessing();
     }
 
     @FXML

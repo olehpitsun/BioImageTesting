@@ -42,7 +42,15 @@
 
                                 <Button fx:id="loadImageButton" mnemonicParsing="false" onAction="#chooseFile" text="Завантажити зображення" visible="true" GridPane.rowIndex="0" />
 
-                                <Label fx:id="firstNameLabel" styleClass="label-bright" text="" GridPane.columnIndex="1" />
+                                <Label  styleClass="label-bright" text="" GridPane.columnIndex="1" />
+                                <Label  styleClass="label-bright" text="" GridPane.columnIndex="2" />
+
+                                <Label  fx:id="mseLabel" styleClass="label-bright" text="середньо-квадр. помилка" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                                <Label  fx:id="mseResLabel" styleClass="label-bright" text="" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                                <Label  fx:id="psnrLabel" styleClass="label-bright" text="PSNR" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                                <Label  fx:id="psnrResLabel" styleClass="label-bright" text="" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
 
 
 
@@ -57,8 +65,8 @@
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="125.0" prefHeight="362.0" prefWidth="130.0" styleClass="background" SplitPane.resizableWithParent="false">
                     <children>
-                        <ImageView fx:id="preProcImage" fitHeight="450.0" fitWidth="450.0" layoutX="-15.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="segmentationImage" fitHeight="450.0" fitWidth="450.0" layoutX="-15.0" layoutY="375.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="originalImage" fitHeight="450.0" fitWidth="450.0" layoutX="-15.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="preprocImage" fitHeight="450.0" fitWidth="450.0" layoutX="-15.0" layoutY="375.0" pickOnBounds="true" preserveRatio="true" />
                     </children>
                 </AnchorPane>
                 <AnchorPane prefHeight="362.0" prefWidth="100.0" styleClass="background" SplitPane.resizableWithParent="false">

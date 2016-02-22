@@ -539,22 +539,22 @@ public class StartController {
 
 
                 if(Estimate.getSecondHistAverageValue() >12 && Estimate.getSecondHistAverageValue()<=20){
-                    this.auto("11", "15","1","10");
+                    this.auto("1.1", "15","1","10");
                 }
                 if(Estimate.getSecondHistAverageValue() >20 && Estimate.getSecondHistAverageValue()<32){
-                    this.auto("11", "16","3","1");
+                    this.auto("1.1", "16","3","1");
                 }
                 if(Estimate.getSecondHistAverageValue() >35 && Estimate.getSecondHistAverageValue()<41){
-                    this.auto("11", "15","1","2");
+                    this.auto("1.1", "15","1","2");
                 }
                 if(Estimate.getSecondHistAverageValue() >42 && Estimate.getSecondHistAverageValue()<51){
-                    this.auto("11", "5","1","1");
+                    this.auto("1.1", "5","1","1");
                 }
                 if(Estimate.getSecondHistAverageValue() >52){
-                    this.auto("11", "15","1","1");
+                    this.auto("1.1", "15","1","1");
                 }
                 else{
-                    this.auto("11", "15","1","1");
+                    this.auto("1.1", "15","1","1");
                 }
 
 
@@ -567,25 +567,25 @@ public class StartController {
 
 
                 if(Estimate.getSecondHistAverageValue() > 58 && Estimate.getSecondHistAverageValue() < 68){
-                    this.auto("11", "5","2","1");
+                    this.auto("1.1", "5","2","1");
                 }
                 if(Estimate.getSecondHistAverageValue() >110 && Estimate.getSecondHistAverageValue() <= 140){
-                    this.auto("11", "22","2","1");
+                    this.auto("1.1", "22","2","1");
 
                 }
                 if(Estimate.getSecondHistAverageValue() >140 && Estimate.getSecondHistAverageValue() < 149){
-                    this.auto("11", "11","1","5");
+                    this.auto("1.1", "11","1","5");
 
                 }
 
                 if(Estimate.getSecondHistAverageValue() >= 149){
-                    this.auto("11", "9","1","1");
+                    this.auto("1.1", "9","1","1");
 
                 }
 
 
                 else{
-                    this.auto("11", "9","1","1");
+                    this.auto("1.1", "9","1","1");
 
                 }
 

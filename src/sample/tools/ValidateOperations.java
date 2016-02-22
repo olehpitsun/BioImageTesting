@@ -16,6 +16,17 @@ public class ValidateOperations {
         }
     }
 
+    public static boolean isDouble(String inputValue){
+        Double s;
+        try {
+            s = Double.parseDouble(inputValue);
+            return true;
+        } catch (NumberFormatException e) {
+
+            return false;
+        }
+    }
+
     public static String filterAndSegValidate(String param){
         if(param.length()==0 || ValidateOperations.isInt(param) == false ){
             param ="3";
@@ -24,4 +35,6 @@ public class ValidateOperations {
         }
         return param;
     }
+
+
 }

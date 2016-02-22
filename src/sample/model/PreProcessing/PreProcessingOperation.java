@@ -22,7 +22,7 @@ public class PreProcessingOperation {
         this.outputImage = inputImage;
         PreProcessingParam prparam = new PreProcessingParam();
 
-        if (contrast.length() == 0 || ValidateOperations.isInt(contrast) == false) {
+        if (contrast.length() == 0 || ValidateOperations.isDouble(contrast) == false) {
             prparam.setContrast(null);
         }else{
             prparam.setContrast(contrast);
@@ -51,7 +51,7 @@ public class PreProcessingOperation {
     public void setPreProcValue(String contrast, String bright, String dilate, String erode){
 
         if(contrast != null) {
-            outputImage = PreProcessing.contrast(this.outputImage, Integer.parseInt(contrast));
+            outputImage = PreProcessing.contrast(this.outputImage, Double.parseDouble(contrast));
         }
 
         if(bright != null){

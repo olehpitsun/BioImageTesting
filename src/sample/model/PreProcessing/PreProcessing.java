@@ -14,7 +14,7 @@ import sample.util.Estimate;
 public class PreProcessing{
 
 
-    public static Mat contrast (Mat image, Integer a){
+    public static Mat contrast (Mat image, Double b){
 
 
         Mat hsvImg = new Mat();
@@ -42,8 +42,12 @@ public class PreProcessing{
         Scalar modifier;
 
 
-        double amt = 1.2;
-        modifier = new Scalar(0.9,0.9,1.2,1);
+        System.out.println(b);
+
+        Double r = b;
+        Double g = b;
+
+        modifier = new Scalar(r,g,b,1);
         Core.multiply(image, modifier, image);
         return image;
     }

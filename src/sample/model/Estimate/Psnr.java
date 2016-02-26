@@ -123,5 +123,4 @@ public final class Psnr {
         final double blue = source.getBlue() - target.getBlue();
         return Math.sqrt(red * red + blue * blue + green * green);
     }
-
 }

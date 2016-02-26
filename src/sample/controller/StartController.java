@@ -569,8 +569,18 @@ public class StartController {
                 if(Estimate.getSecondHistAverageValue() > 58 && Estimate.getSecondHistAverageValue() < 68){
                     this.auto("1.1", "5","2","1");
                 }
+
+                if(Estimate.getSecondHistAverageValue() >=68 && Estimate.getSecondHistAverageValue() <= 80){
+                    this.auto("1.1", "10","1","5");
+
+                }
+                if(Estimate.getSecondHistAverageValue() >=100 && Estimate.getSecondHistAverageValue() <= 118){
+                    this.auto("1.1", "12","2","1");
+
+                }
+
                 if(Estimate.getSecondHistAverageValue() >110 && Estimate.getSecondHistAverageValue() <= 140){
-                    this.auto("1.1", "22","2","1");
+                    this.auto("1.1", "20","3","1");
 
                 }
                 if(Estimate.getSecondHistAverageValue() >140 && Estimate.getSecondHistAverageValue() < 149){
@@ -579,7 +589,7 @@ public class StartController {
                 }
 
                 if(Estimate.getSecondHistAverageValue() >= 149){
-                    this.auto("1.1", "9","1","1");
+                    this.auto("1.1", "12","1","1");
 
                 }
 

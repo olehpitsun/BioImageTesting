@@ -24,7 +24,11 @@ import sample.tools.ImageOperations;
 import sample.util.Estimate;
 import sample.util.PreProcessingParam;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -158,6 +162,7 @@ public class PreProcessingController {
         if(file != null) {
             this.image = Highgui.imread(file.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_COLOR);
 
+            averageColor(file);
             sample.model.Image.setImageMat(this.image);
            // Mat newImage = sample.model.Image.getImageMat();
 
@@ -173,6 +178,36 @@ public class PreProcessingController {
         }
     }
 
+    public static void averageColor(File file)throws IOException {
+        BufferedImage bi = ImageIO.read(file);
+
+        for (int i = 0; i < 256; i++) {}
+
+        int x0 =0;
+        int y0 = 0;
+        int w = bi.getWidth();
+        int h = bi.getHeight();
+
+        int x1 = x0 + w;
+        int y1 = y0 + h;
+        long sumr = 0, sumg = 0, sumb = 0;
+        for (int x = x0; x < x1; x++) {
+            for (int y = y0; y < y1; y++) {
+                Color pixel = new Color(bi.getRGB(x, y));
+                sumr += pixel.getRed();
+                sumg += pixel.getGreen();
+                sumb += pixel.getBlue();
+            }
+        }
+        int num = w * h;
+        System.out.println(sumr/ num);
+        System.out.println(sumg/ num);
+        System.out.println(sumb/ num);
+
+        double y = (299 * sumr + 587 * sumg + 114 * sumb) / 1000;
+        System.out.println("Bright = " + y);
+        //return new Color(sumr / num, sumg / num, sumb / num);
+    }
 
     @FXML
     private void saveChangeImage(){

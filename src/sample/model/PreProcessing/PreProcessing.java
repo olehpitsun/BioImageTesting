@@ -1,6 +1,7 @@
 package sample.model.PreProcessing;
 
 import org.opencv.core.*;
+import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 import sample.util.Estimate;
 
@@ -47,7 +48,7 @@ public class PreProcessing{
         Double r = b;
         Double g = b;
 
-        modifier = new Scalar(r,g,b,1);
+        modifier = new Scalar(1,1,1,1);
         Core.multiply(image, modifier, image);
         return image;
     }

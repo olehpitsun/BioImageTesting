@@ -39,8 +39,8 @@ public class Filters {
 
     public static Mat medianBlur(Mat image, int kSize){
         if (kSize%2 == 0) kSize -= 1;
-        Mat result = new Mat();
-        Imgproc.medianBlur(image, result, kSize);
-        return result;
+        //Mat result = new Mat();
+        Imgproc.medianBlur(image, image, kSize);
+        return image;
     }
 }

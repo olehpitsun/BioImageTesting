@@ -17,7 +17,8 @@ public class FiltersOperations {
     public FiltersOperations(Mat inputImage, String filterType, String kSize, String sigma,
                              String sigmaSpace, String sigmaColor){
 
-        outputImage = inputImage;
+        outputImage = new Mat();
+
         this.kSize = ValidateOperations.filterAndSegValidate(kSize);
         this.sigma = ValidateOperations.filterAndSegValidate(sigma);
         this.sigmaSpace = ValidateOperations.filterAndSegValidate(sigmaSpace);
@@ -40,6 +41,7 @@ public class FiltersOperations {
         if(filterType == "4"){
             outputImage = Filters.medianBlur(inputImage,Integer.parseInt(this.kSize));
         }
+
     }
 
     public Mat getOutputImage(){

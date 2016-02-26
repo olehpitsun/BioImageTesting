@@ -18,16 +18,21 @@ import sample.model.Filters.FilterColection;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import sample.model.Filters.FiltersOperations;
 import sample.model.HistogramEQ;
 import sample.model.PreProcessing.PreProcessingOperation;
+import sample.model.PreProcessing.StartImageParams;
 import sample.model.Segmentation.SegmentationColection;
 import sample.model.Segmentation.SegmentationOperations;
 import sample.tools.ImageOperations;
@@ -286,6 +291,56 @@ public class StartController {
         loadImageButton.setVisible(true);
     }
 
+
+    public void showHisImage(String orImage){
+        Mat image = Highgui.imread(orImage);
+
+        Mat src = new Mat(image.height(), image.width(), CvType.CV_8UC2);
+
+
+        Imgproc.cvtColor(image, src, Imgproc.COLOR_RGB2GRAY);
+
+
+
+        Vector<Mat> bgr_planes = new Vector<>();
+        Core.split(src, bgr_planes);
+
+        MatOfInt histSize = new MatOfInt(256);
+
+
+        final MatOfFloat histRange = new MatOfFloat(0f, 256f);
+
+        boolean accumulate = false;
+
+        Mat b_hist = new  Mat();
+
+        Imgproc.calcHist(bgr_planes, new MatOfInt(0),new Mat(), b_hist, histSize, histRange, accumulate);
+
+        int hist_w = 512;
+        int hist_h = 600;
+        long bin_w;
+        bin_w = Math.round((double) (hist_w / 256));
+
+        Mat histImage = new Mat(hist_h, hist_w, CvType.CV_8UC1);
+
+        Core.normalize(b_hist, b_hist, 3, histImage.rows(), Core.NORM_MINMAX);
+
+
+
+        for (int i = 1; i < 256; i++) {
+
+
+            Core.line(histImage, new Point(bin_w * (i - 1),hist_h- Math.round(b_hist.get( i-1,0)[0])),
+                    new Point(bin_w * (i), hist_h-Math.round(Math.round(b_hist.get(i, 0)[0]))),
+                    new  Scalar(255, 0, 0), 2, 8, 0);
+
+        }
+
+        this.setSegmentationImage(histImage);
+
+        //ImageViwer.viewImage(histImage);
+    }
+
     public void chooseFile(ActionEvent actionEvent) throws java.io.IOException {
 
         FileChooser chooser = new FileChooser();
@@ -294,12 +349,22 @@ public class StartController {
         chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files","*.bmp", "*.png", "*.jpg", "*.gif"));
         File file = chooser.showOpenDialog(new Stage());
         if(file != null) {
+
+            /** return RGB values, average bright**/
+            StartImageParams.getStartValues(file);
+
+            //HistogramEQ.atart(file.getAbsolutePath());
+
+            //this.showHisImage(file.getAbsolutePath());
+
+
             this.image = Highgui.imread(file.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_COLOR);
 
             sample.model.Image.setImageMat(this.image);
             Mat newImage = sample.model.Image.getImageMat();
             // show the image
             this.setPreProcImage(newImage);
+
 
             saveChangeButton.setVisible(true);
             ContrastLabel.setVisible(true);
@@ -425,113 +490,122 @@ public class StartController {
 
     }
 
+
     @FXML
     public void autoSetting(){
-        this.autoPreProcFiltersSegmentationSetting("11","15","1","1");
+        this.autoPreProcFiltersSegmentationSetting();
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @FXML
-    public void autoPreProcFiltersSegmentationSetting(String contrast, String bright, String dilate, String erode){
+    public void autoPreProcFiltersSegmentationSetting(){
 
-        /*String contrast ="11";
-        String bright ="15";
-        String dilate ="1";
-        String erode="1";*/
+        Mat dst = new Mat();
+        this.image.copyTo(dst);
 
-        Mat d = this.image;
-        PreProcessingOperation properation = new PreProcessingOperation(d,contrast,
-                bright, dilate,erode);
+        float tempBrightValue = Estimate.getBrightVal();
 
-        // called only OpenCV filtering functions
-        FiltersOperations filtroperation = new FiltersOperations(properation.getOutputImage(), "3",
-                "4", "", "", "");
-        //this.setPreProcImage(filtroperation.getOutputImage());//show image after preprocessing and filtering
+        if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130){
+            this.setImageParam(dst, "1","15","1","1");
+        }else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130){
+            this.setImageParam(dst, "1","18","3","1");
+
+        }
 
 
+        else if(tempBrightValue <= 0.9) {
+            this.setImageParam(dst, "1","9","5","1");
+        }
+        else {
+            this.setImageParam(dst, "1","20","1","1");
+        }
+
+    }
 
 
+    public void setImageParam(Mat dst, String contrast, String bright, String dilate, String erode){
 
-        SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), "3",
-                ValueField.getText(), MaxValThresholdField.getText());
+        FiltersOperations filtroperation = new FiltersOperations(dst, "4", "3", "", "", "");
+        PreProcessingOperation properation = new PreProcessingOperation(filtroperation.getOutputImage(),contrast,bright,
+                dilate, erode);
 
         filtroperation.getOutputImage().release();
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        SegmentationOperations segoperation = new SegmentationOperations(properation.getOutputImage(), "3",
+                "0", "0");
+
+        properation.getOutputImage().release();
+
         SegmentationOperations segoperation_1 = new SegmentationOperations(segoperation.getOutputImage(), "1",
                 "200", "255");
 
-        segoperation.getOutputImage().release();
 
+        this.setSegmentationImage(segoperation_1.getOutputImage());
 
-        //this.setPreProcImage(this.image);
-        this.checkHistogram();
-
-        //SegmentationOperations segoperation_2 = new SegmentationOperations(segoperation_1.getOutputImage(), "1",
-          //      "220", "255");
-
-        //segoperation_1.getOutputImage().release();
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //this.setPreProcImage(segoperation.getOutputImage());
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-        //this.setSegmentationImage(segoperation_2.getOutputImage());// show image after segmentation
-
-        //this.saveChangeImage();
-/*
-        PreProcessingOperation properation_1 = new PreProcessingOperation(segoperation_2.getOutputImage(),contrast,
-                bright, dilate,erode);
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-        SegmentationOperations segoperation_3 = new SegmentationOperations(properation_1.getOutputImage(), "1",
-                "20", "159");
-
-        SegmentationOperations segoperation_4 = new SegmentationOperations(segoperation_3.getOutputImage(), "1",
-                "0", "149");
-/////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-        PreProcessingOperation properation_2 = new PreProcessingOperation(segoperation_4.getOutputImage(),contrast,
-                bright, dilate,erode);
-        ///////////////////////////////////////////////////////////////////////////////////////////////
-        SegmentationOperations segoperation_5 = new SegmentationOperations(properation_2.getOutputImage(), "1",
-                "0", "169");
-
-        SegmentationOperations segoperation_6 = new SegmentationOperations(segoperation_5.getOutputImage(), "1",
-                "50", "229");
-/////////////////////////////////////////////////////////////////////////////////////////////////
-*/
-
-
-
-
-
-        //this.setSegmentationImage(segoperation_2.getOutputImage());// show image after segmentation
-
+        segoperation_1.getOutputImage().release();
     }
 
-    public Integer count = 0;
-    public void checkHistogram(){
-       // if(count != 1){
 
-       // }else{
-            count ++;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void checkHistogram(){
+
             System.out.println("Res " + Estimate.checkHistogramValues());
 
             if(Estimate.checkHistogramValues() == true){
@@ -590,9 +664,75 @@ public class StartController {
                 }
 
             }
-       // }
 
     }
+
+
+    /**
+     public void checkHistogram(){
+
+     System.out.println("Res " + Estimate.checkHistogramValues());
+
+     if(Estimate.checkHistogramValues() == true){
+     System.out.println("??????????????????????????????????????????????????????????????????????????????????????????");
+
+
+     if(Estimate.getSecondHistAverageValue() >12 && Estimate.getSecondHistAverageValue()<=20){
+     this.auto("11", "15","1","10");
+     }
+     if(Estimate.getSecondHistAverageValue() >20 && Estimate.getSecondHistAverageValue()<32){
+     this.auto("11", "16","3","1");
+     }
+     if(Estimate.getSecondHistAverageValue() >35 && Estimate.getSecondHistAverageValue()<41){
+     this.auto("11", "15","1","2");
+     }
+     if(Estimate.getSecondHistAverageValue() >42 && Estimate.getSecondHistAverageValue()<51){
+     this.auto("11", "5","1","1");
+     }
+     if(Estimate.getSecondHistAverageValue() >52){
+     this.auto("11", "15","1","1");
+     }
+     else{
+     this.auto("11", "15","1","1");
+     }
+
+
+
+
+
+     }else{
+     System.out.println("//////////////////////////////////////////////////////////////////////////////////////////");
+
+
+
+     if(Estimate.getSecondHistAverageValue() > 58 && Estimate.getSecondHistAverageValue() < 68){
+     this.auto("11", "5","2","1");
+     }
+     if(Estimate.getSecondHistAverageValue() >110 && Estimate.getSecondHistAverageValue() <= 140){
+     this.auto("11", "22","2","1");
+
+     }
+     if(Estimate.getSecondHistAverageValue() >140 && Estimate.getSecondHistAverageValue() < 149){
+     this.auto("11", "11","1","5");
+
+     }
+
+     if(Estimate.getSecondHistAverageValue() >= 149){
+     this.auto("11", "9","1","1");
+
+     }
+
+
+     else{
+     this.auto("11", "9","1","1");
+
+     }
+
+     }
+
+     }
+     */
+
 
     @FXML
     public void auto(String contrast, String bright, String dilate, String erode){

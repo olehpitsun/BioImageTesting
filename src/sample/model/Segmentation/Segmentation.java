@@ -240,7 +240,7 @@ public class Segmentation{
 
         // яскравість
 
-        if(Estimate.getFirstHistAverageValue() !=null && Estimate.getSecondHistAverageValue()!=null &&
+        /**if(Estimate.getFirstHistAverageValue() !=null && Estimate.getSecondHistAverageValue()!=null &&
                 Estimate.checkHistogramValues() == false) {
             System.out.println( "Bsd");
             if(Estimate.getSecondHistAverageValue() >110 && Estimate.getSecondHistAverageValue() < 145){
@@ -267,13 +267,30 @@ public class Segmentation{
             if( Estimate.getSecondHistAverageValue()!=null && Estimate.getSecondHistAverageValue() >= 53){
                 System.out.println("URA");
                 rgba.convertTo(rgba, -1, 10d * 38 / 100, 0);
-            }else{*/
+            }else{
+
                 rgba.convertTo(rgba, -1, 10d * 18 / 100, 0);
             //}
 
             System.out.println( "Good");
 
+        }**/
+
+        float tempBrightValue = Estimate.getBrightVal();
+        if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 100) {
+            rgba.convertTo(rgba, -1, 10d * 5 / 100, 0);
         }
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 200 && Estimate.getRedAverage() < 100){
+            rgba.convertTo(rgba, -1, 10d * 11 / 100, 0);
+        }
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 220 && Estimate.getRedAverage() < 100){
+            rgba.convertTo(rgba, -1, 10d * 13 / 100, 0);
+        }
+
+        else{
+            rgba.convertTo(rgba, -1, 10d * 18 / 100, 0);
+        }
+
         Imgproc.cvtColor(rgba, mHSV, Imgproc.COLOR_RGBA2RGB,3);
         Imgproc.cvtColor(rgba, mHSV, Imgproc.COLOR_RGB2HSV,3);
         List<Mat> hsv_planes = new ArrayList<Mat>(3);
@@ -309,9 +326,10 @@ public class Segmentation{
 
         double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
 
-        Estimate.setSecondHistAverageValue(threshValue);
-        System.out.println ( "Fdter " + Estimate.getSecondHistAverageValue());
-
+        if(Estimate.getSecondHistAverageValue() == null) {// debug
+            Estimate.setSecondHistAverageValue(threshValue);
+            System.out.println("Fdter " + Estimate.getSecondHistAverageValue());
+        }
 
 
 

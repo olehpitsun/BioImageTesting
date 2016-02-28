@@ -528,23 +528,59 @@ public class StartController {
     public void autoPreProcFiltersSegmentationSetting(){
 
         Mat dst = new Mat();
+        Mat testDst = new Mat();
+
         this.image.copyTo(dst);
+        this.image.copyTo(testDst);
+
+        /** use testing parametrs for getting HistAverValue **/
+        PreProcessingOperation properation = new PreProcessingOperation(testDst,"1","15", "1", "1");
+
+        SegmentationOperations segoperation = new SegmentationOperations(properation.getOutputImage(), "3",
+                "0", "0");
+        testDst.release();//clear memory
+        properation.getOutputImage().release();
+
 
         float tempBrightValue = Estimate.getBrightVal();
 
-        if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130){
-            this.setImageParam(dst, "1","15","1","1");
-        }else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130){
-            this.setImageParam(dst, "1","18","3","1");
+        /** for very blue **/
+        if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 100){
+            System.out.println ("1");
+
+            this.setImageParam(dst, "1","17","2","2");
+        }
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 200 && Estimate.getRedAverage() < 100){
+            System.out.println ("6");
+
+            this.setImageParam(dst, "1","15","15","10");
+        }
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 100){
+            System.out.println ("2");
+
+            this.setImageParam(dst, "1","15","1","3");
 
         }
 
 
-        else if(tempBrightValue <= 0.9) {
-            this.setImageParam(dst, "1","9","5","1");
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130
+                && Estimate.getSecondHistAverageValue() >20){
+            System.out.println ("3");
+
+            this.setImageParam(dst, "1","21","3","1");
+
+        }
+
+
+        else if(tempBrightValue <= 0.9 && Estimate.getFirstHistAverageValue()>100 && Estimate.getRedAverage() < 80) {
+            System.out.println ("4");
+            this.setImageParam(dst, "1","9","25","11");
+
         }
         else {
-            this.setImageParam(dst, "1","20","1","1");
+            this.setImageParam(dst, "1","15","1","1");
+            System.out.println ("else");
         }
 
     }
@@ -552,7 +588,7 @@ public class StartController {
 
     public void setImageParam(Mat dst, String contrast, String bright, String dilate, String erode){
 
-        FiltersOperations filtroperation = new FiltersOperations(dst, "4", "3", "", "", "");
+        FiltersOperations filtroperation = new FiltersOperations(dst, "4", "9", "", "", "");
         PreProcessingOperation properation = new PreProcessingOperation(filtroperation.getOutputImage(),contrast,bright,
                 dilate, erode);
 
@@ -564,6 +600,7 @@ public class StartController {
                 "0", "0");
 
         properation.getOutputImage().release();
+        //this.setSegmentationImage(segoperation.getOutputImage());
 
         SegmentationOperations segoperation_1 = new SegmentationOperations(segoperation.getOutputImage(), "1",
                 "200", "255");
@@ -572,6 +609,10 @@ public class StartController {
         this.setSegmentationImage(segoperation_1.getOutputImage());
 
         segoperation_1.getOutputImage().release();
+
+        Estimate.setFirstHistAverageValue(null);
+        Estimate.setSecondHistAverageValue(null);
+        System.out.println("------------------------------------------------------------------------------------------");
     }
 
 

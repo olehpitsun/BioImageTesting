@@ -34,9 +34,10 @@ public class PreProcessing{
         // get the average hue value of the image
         double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
 
-       Estimate.setFirstHistAverageValue(threshValue);
-        System.out.println("Value before " +Estimate.getFirstHistAverageValue());
-
+        if(Estimate.getFirstHistAverageValue() == null) {// debug
+            Estimate.setFirstHistAverageValue(threshValue);
+            System.out.println("Value before " + Estimate.getFirstHistAverageValue());
+        }
 
 
         Scalar modifier;

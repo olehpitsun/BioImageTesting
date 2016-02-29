@@ -286,6 +286,21 @@ public class Segmentation{
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 220 && Estimate.getRedAverage() < 100){
             rgba.convertTo(rgba, -1, 10d * 13 / 100, 0);
         }
+///////////
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 110 && Estimate.getBlueAverage() < 220 && Estimate.getRedAverage() > 130 && Estimate.getRedAverage() < 190){
+            rgba.convertTo(rgba, -1, 10d * 9 / 100, 0);
+        }
+        ///////////
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 220 && Estimate.getRedAverage() > 100 && Estimate.getRedAverage() < 190){
+            rgba.convertTo(rgba, -1, 10d * 9 / 100, 0);
+        }
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 220 && Estimate.getRedAverage() > 190 ){
+            rgba.convertTo(rgba, -1, 10d * 16 / 100, 0);
+        }
+
+        else if(tempBrightValue < 0.9 && tempBrightValue > 0 && Estimate.getBlueAverage() > 100 && Estimate.getBlueAverage() < 220 && Estimate.getRedAverage() < 110){
+            rgba.convertTo(rgba, -1, 10d * 29 / 100, 0);
+        }
 
         else{
             rgba.convertTo(rgba, -1, 10d * 18 / 100, 0);

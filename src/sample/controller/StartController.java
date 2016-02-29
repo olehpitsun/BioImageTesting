@@ -556,12 +556,28 @@ public class StartController {
             this.setImageParam(dst, "1","15","15","10");
         }
 
+        else if(tempBrightValue > 1.5 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 100){
+            System.out.println ("13");
+
+            this.setImageParam(dst, "1","13","1","5");
+
+        }
+
+        else if(tempBrightValue > 1.1 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 100){
+            System.out.println ("11");
+
+            this.setImageParam(dst, "1","19","1","1");
+
+        }
+
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 100){
             System.out.println ("2");
 
             this.setImageParam(dst, "1","15","1","3");
 
         }
+
+
 
 
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130
@@ -572,6 +588,18 @@ public class StartController {
 
         }
 
+
+        else if(tempBrightValue <= 0.9 && Estimate.getFirstHistAverageValue() < 100 && Estimate.getRedAverage() < 80) {
+            System.out.println ("8");
+            this.setImageParam(dst, "1","9","25","11");
+
+        }
+
+        else if(tempBrightValue <= 0.9 && Estimate.getFirstHistAverageValue() < 100 && Estimate.getRedAverage() >= 80) {
+            System.out.println ("9");
+            this.setImageParam(dst, "1","8","23","1");
+
+        }
 
         else if(tempBrightValue <= 0.9 && Estimate.getFirstHistAverageValue()>100 && Estimate.getRedAverage() < 80) {
             System.out.println ("4");

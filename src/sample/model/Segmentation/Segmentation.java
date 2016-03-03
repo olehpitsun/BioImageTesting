@@ -298,8 +298,12 @@ public class Segmentation{
             rgba.convertTo(rgba, -1, 10d * 16 / 100, 0);
         }
 
-        else if(tempBrightValue < 0.9 && tempBrightValue > 0 && Estimate.getBlueAverage() > 100 && Estimate.getBlueAverage() < 220 && Estimate.getRedAverage() < 110){
+        else if(tempBrightValue < 0.9 && tempBrightValue > 0.5 && Estimate.getBlueAverage() > 100 && Estimate.getBlueAverage() < 220 && Estimate.getRedAverage() < 110){
             rgba.convertTo(rgba, -1, 10d * 29 / 100, 0);
+        }
+
+        else if(tempBrightValue < 0.5 && Estimate.getBlueAverage() > 100 && Estimate.getBlueAverage() < 240 && Estimate.getRedAverage() < 240){
+            rgba.convertTo(rgba, -1, 10d * 9 / 100, 0);
         }
 
         else{

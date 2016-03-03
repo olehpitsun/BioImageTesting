@@ -556,10 +556,31 @@ public class StartController {
             this.setImageParam(dst, "1","15","15","10");
         }
 
-        else if(tempBrightValue > 1.5 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 100){
+        else if(tempBrightValue > 1.5 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 220){
             System.out.println ("13");
 
+            this.setImageParam(dst, "1","16","1","2");
+
+        }
+
+        else if(tempBrightValue > 1.5 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 100){
+            System.out.println ("23");
+
             this.setImageParam(dst, "1","13","1","5");
+
+        }
+
+        else if(tempBrightValue > 1.1 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 160){
+            System.out.println ("16");
+
+            this.setImageParam(dst, "1","29","23","1");
+
+        }
+
+        else if(tempBrightValue > 1.1 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 140){
+            System.out.println ("21");
+
+            this.setImageParam(dst, "1","19","15","1");
 
         }
 
@@ -578,6 +599,48 @@ public class StartController {
         }
 
 
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130
+                && Estimate.getFirstHistAverageValue() >100){
+            System.out.println ("20");
+
+            this.setImageParam(dst, "1","20","1","1");
+
+        }
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 90 && Estimate.getRedAverage() > 130
+                && Estimate.getSecondHistAverageValue() >110){
+            System.out.println ("17");
+
+            this.setImageParam(dst, "1","11","1","9");
+
+        }
+
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130 && Estimate.getRedAverage() > 130
+                && Estimate.getSecondHistAverageValue() >165){
+            System.out.println ("22");
+
+            this.setImageParam(dst, "1","32","17","1");
+
+        }
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130 && Estimate.getRedAverage() > 130
+                && Estimate.getSecondHistAverageValue() >110){
+            System.out.println ("15");
+
+            this.setImageParam(dst, "1","33","8","1");
+
+        }
+
+
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130
+                && Estimate.getFirstHistAverageValue() >20){
+            System.out.println ("18");
+
+            this.setImageParam(dst, "1","18","1","1");
+
+        }
 
 
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130
@@ -606,6 +669,19 @@ public class StartController {
             this.setImageParam(dst, "1","9","25","11");
 
         }
+
+        else if(tempBrightValue <= 0.9 && tempBrightValue >= 0.5 && Estimate.getFirstHistAverageValue()>100 && Estimate.getRedAverage() > 100) {
+            System.out.println ("19");
+            this.setImageParam(dst, "1","15","14","11");
+
+        }
+
+        else if(tempBrightValue <= 0.5 && Estimate.getFirstHistAverageValue()>100 && Estimate.getRedAverage() > 100) {
+            System.out.println ("24");
+            this.setImageParam(dst, "1","2","1","10");
+
+        }
+
         else {
             this.setImageParam(dst, "1","15","1","1");
             System.out.println ("else");
@@ -622,6 +698,7 @@ public class StartController {
 
         filtroperation.getOutputImage().release();
 
+        this.setPreProcImage(properation.getOutputImage());
 
 
         SegmentationOperations segoperation = new SegmentationOperations(properation.getOutputImage(), "3",
@@ -820,8 +897,8 @@ public class StartController {
 
         // called only OpenCV filtering functions
         FiltersOperations filtroperation = new FiltersOperations(properation.getOutputImage(), "3",
-                "4", "", "", "");
-        //this.setPreProcImage(filtroperation.getOutputImage());//show image after preprocessing and filtering
+                "27", "", "", "");
+        this.setSegmentationImage(filtroperation.getOutputImage());//show image after preprocessing and filtering
 
 
 
@@ -852,7 +929,7 @@ public class StartController {
 
 
 
-        this.setSegmentationImage(segoperation_2.getOutputImage());// show image after segmentation
+         //this.setSegmentationImage(segoperation_2.getOutputImage());// show image after segmentation
 
         this.saveChangeImage();
 

@@ -545,17 +545,40 @@ public class StartController {
         float tempBrightValue = Estimate.getBrightVal();
 
         /** for very blue **/
-        if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 90
-                 ){
-            System.out.println ("29");
 
-            this.setImageParam(dst, "1","29","2","2");
+        if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 140){
+            System.out.println ("38");
+            this.setImageParam(dst, "1","25","1","2");
         }
 
-        if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 90){
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 135){
+            System.out.println ("37");
+            this.setImageParam(dst, "1","25","1","2");
+        }
+
+
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 115){
+            System.out.println ("36");
+            this.setImageParam(dst, "1","10","1","2");
+        }
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130 && Estimate.getRedAverage() > 90){
+            System.out.println ("35");
+            this.setImageParam(dst, "1","20","2","2");
+        }
+
+        else if(tempBrightValue < 0.9 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() < 100
+                ){
+            System.out.println ("36");
+
+            this.setImageParam(dst, "1","10","2","2");
+        }
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 90){
             System.out.println ("29");
 
-            this.setImageParam(dst, "1","29","2","2");
+            this.setImageParam(dst, "1","27","2","2");
         }
 
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 100){
@@ -566,7 +589,7 @@ public class StartController {
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 200 && Estimate.getRedAverage() < 100){
             System.out.println ("6");
 
-            this.setImageParam(dst, "1","15","15","10");
+            this.setImageParam(dst, "1","15","10","10");
         }
 
         else if(tempBrightValue > 1.5 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 220){
@@ -717,7 +740,7 @@ public class StartController {
 
         else if(tempBrightValue <= 0.9 && Estimate.getFirstHistAverageValue() < 100 && Estimate.getRedAverage() >= 110) {
             System.out.println ("25");
-            this.setImageParam(dst, "1","6","1","3");
+            this.setImageParam(dst, "1","13","1","3");//6-br
 
         }
 
@@ -739,9 +762,27 @@ public class StartController {
 
         }
 
-        else if(tempBrightValue <= 0.5 && Estimate.getFirstHistAverageValue()>100 && Estimate.getRedAverage() > 100) {
+
+        else if(tempBrightValue <= 0.5 && Estimate.getRedAverage() > 170 && Estimate.getRedAverage()<190 && Estimate.getBlueAverage()>205
+                && Estimate.getBlueAverage()<225) {
+            System.out.println ("40");
+            //thresholdSegmentation(dst);
+            this.setImageParam(dst, "1","20","1","1");
+
+        }
+
+        else if(tempBrightValue <= 0.5 && Estimate.getRedAverage() > 140 && Estimate.getBlueAverage()>200
+                && Estimate.getFirstHistAverageValue() > 120) {
+            System.out.println ("41");
+            thresholdSegmentation(dst);
+            //this.setImageParam(dst, "1","20","1","1");
+
+        }
+
+        else if(tempBrightValue <= 0.5 && Estimate.getFirstHistAverageValue()>130 && Estimate.getRedAverage() > 170 && Estimate.getBlueAverage()>170) {
             System.out.println ("24");
-            this.setImageParam(dst, "1","2","1","10");
+            thresholdSegmentation(dst);
+            //this.setImageParam(dst, "1","1","1","1");
 
         }
 
@@ -753,6 +794,8 @@ public class StartController {
             this.setImageParam(dst, "1","20","5","1");
 
         }
+
+
 
         else {
             this.setImageParam(dst, "1","15","1","1");
@@ -794,6 +837,24 @@ public class StartController {
 
 
 
+    private void thresholdSegmentation(Mat dst){
+
+/*
+        FiltersOperations filtroperation = new FiltersOperations(dst, "4", "9", "", "", "");
+        PreProcessingOperation properation = new PreProcessingOperation(filtroperation.getOutputImage(),"1.1","10",
+                "1", "1");
+
+        filtroperation.getOutputImage().release();*/
+
+        SegmentationOperations segoperation_1 = new SegmentationOperations(dst, "1",
+                "0", "10");
+
+       // properation.getOutputImage().release();
+
+        this.setSegmentationImage(segoperation_1.getOutputImage());
+
+        segoperation_1.getOutputImage().release();
+    }
 
 
 

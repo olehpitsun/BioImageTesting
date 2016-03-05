@@ -277,7 +277,18 @@ public class Segmentation{
         }**/
 
         float tempBrightValue = Estimate.getBrightVal();
-        if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 100) {
+
+        if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 140 && Estimate.getRedAverage() < 100 ){
+            rgba.convertTo(rgba, -1, 10d * 15 / 100, 0);
+        }
+
+
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 130) {
+            rgba.convertTo(rgba, -1, 10d * 15 / 100, 0);
+        }
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 100) {
             rgba.convertTo(rgba, -1, 10d * 5 / 100, 0);
         }
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 200 && Estimate.getRedAverage() < 100){
@@ -298,8 +309,14 @@ public class Segmentation{
             rgba.convertTo(rgba, -1, 10d * 16 / 100, 0);
         }
 
+
+
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 100 && Estimate.getRedAverage() > 100 ){
             rgba.convertTo(rgba, -1, 10d * 11 / 100, 0);
+        }
+
+        else if(tempBrightValue < 0.5 && Estimate.getBlueAverage() > 170  && Estimate.getRedAverage() > 170){
+            rgba.convertTo(rgba, -1, 10d * 1 / 100, 0);
         }
 
         else if(tempBrightValue < 0.9 && tempBrightValue > 0.5 && Estimate.getBlueAverage() < 100  && Estimate.getRedAverage() > 110){

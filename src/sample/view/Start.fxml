@@ -55,6 +55,12 @@
 
                                 <Button fx:id="autoButton" defaultButton="true" mnemonicParsing="false" onAction="#autoSetting" text="Автоматично" visible="true" GridPane.columnIndex="0" GridPane.rowIndex="6" />
 
+                                <Label  fx:id="mseLabel" styleClass="label-bright" text="середньо-квадр. помилка" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+                                <Label  fx:id="mseResLabel" styleClass="label-bright" text="" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+                                <Label  fx:id="psnrLabel" styleClass="label-bright" text="PSNR" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+                                <Label  fx:id="psnrResLabel" styleClass="label-bright" text="" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+
                             </children>
                         </GridPane>
                         <ButtonBar layoutX="54.0" layoutY="250.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">

@@ -8,7 +8,14 @@ import org.opencv.core.Scalar;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by oleh on 11.02.16.
@@ -53,5 +60,41 @@ public class ImageOperations {
                 Imgproc.BORDER_CONSTANT, Scalar.all(0));
 
         return padded;
+    }
+
+    /**
+     *
+     * @param file
+     * @return
+     */
+    public static BufferedImage getImage(File file) {
+        try {
+            return ImageIO.read(file);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param filePath
+     */
+    public static void deleteFile(String filePath){
+        try{
+
+            File file = new File(filePath);
+
+            if(file.delete()){
+                //System.out.println(file.getName() + " is deleted!");
+            }else{
+                //System.out.println("Delete operation is failed.");
+            }
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+
+        }
     }
 }

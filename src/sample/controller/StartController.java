@@ -3,6 +3,10 @@ package sample.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import org.opencv.core.Point;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 import sample.Main;
@@ -14,7 +18,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.*;
 import sample.core.DB;
+import sample.model.Estimate.Psnr;
 import sample.model.Filters.FilterColection;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +33,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -39,6 +49,8 @@ import sample.tools.ImageOperations;
 import sample.tools.ValidateOperations;
 import sample.util.Estimate;
 import sample.util.PreProcessingParam;
+
+import javax.imageio.ImageIO;
 
 public class StartController {
 
@@ -103,6 +115,16 @@ public class StartController {
     private String researchname;
     private String researchPath;
 
+    private String originalImagePath;
+    private String generatedImagePath;
+
+    private float meanSquaredError;
+    private double psnr;
+
+    @FXML
+    private Label mseResLabel;
+    @FXML
+    private Label psnrResLabel;
 
     /**
      * The constructor.
@@ -251,6 +273,7 @@ public class StartController {
         File file = chooser.showOpenDialog(new Stage());
         if(file != null) {
 
+            this.averageColor(file);
             /** return RGB values, average bright**/
             StartImageParams.getStartValues(file);
 
@@ -262,6 +285,8 @@ public class StartController {
             this.image = Highgui.imread(file.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_COLOR);
 
             sample.model.Image.setImageMat(this.image);
+
+            originalImagePath = file.getAbsolutePath();
             Mat newImage = sample.model.Image.getImageMat();
             // show the image
             this.setOriginalImage(newImage);
@@ -274,6 +299,37 @@ public class StartController {
             alert.setHeaderText("Please Select a File");
             alert.showAndWait();
         }
+    }
+
+    public static void averageColor(File file)throws IOException {
+        BufferedImage bi = ImageIO.read(file);
+
+        for (int i = 0; i < 256; i++) {}
+
+        int x0 =0;
+        int y0 = 0;
+        int w = bi.getWidth();
+        int h = bi.getHeight();
+
+        int x1 = x0 + w;
+        int y1 = y0 + h;
+        long sumr = 0, sumg = 0, sumb = 0;
+        for (int x = x0; x < x1; x++) {
+            for (int y = y0; y < y1; y++) {
+                Color pixel = new Color(bi.getRGB(x, y));
+                sumr += pixel.getRed();
+                sumg += pixel.getGreen();
+                sumb += pixel.getBlue();
+            }
+        }
+        int num = w * h;
+        System.out.println(sumr/ num);
+        System.out.println(sumg/ num);
+        System.out.println(sumb/ num);
+
+        double y = (299 * sumr + 587 * sumg + 114 * sumb) / 1000;
+        System.out.println("Bright = " + y);
+        //return new Color(sumr / num, sumg / num, sumb / num);
     }
 
     /**
@@ -625,9 +681,47 @@ public class StartController {
     }
 
 
+    /**
+     * compare 2 images:
+     * original and after filtering
+     */
+    private void compareImages(){
+        //System.out.println(originalImagePath);
+        //System.out.println(generatedImagePath);
+        this.meanSquaredError = Psnr.getmeanSquaredError(originalImagePath, generatedImagePath);
+        this.psnr = Psnr.getPsnr(this.meanSquaredError);
+
+        mseResLabel.setText(String.valueOf(this.meanSquaredError));
+        psnrResLabel.setText(String.valueOf(this.psnr));
+        //System.out.println(this.meanSquaredError );
+        //System.out.println(this.psnr );
+
+    }
+
+    /**
+     *
+     * @param dst
+     * @param contrast
+     * @param bright
+     * @param dilate
+     * @param erode
+     */
     public void setImageParam(Mat dst, String contrast, String bright, String dilate, String erode){
 
         FiltersOperations filtroperation = new FiltersOperations(dst, "4", "9", "", "", "");
+
+
+
+        // save image on disk
+        String path ="";
+        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        Highgui.imwrite( path + timeStamp + ".png", filtroperation.getOutputImage());
+        generatedImagePath = path + timeStamp + ".png";
+        this.compareImages();// call to compare function
+        // delete temp filtered image
+        ImageOperations.deleteFile(path + timeStamp + ".png");
+
+
 
 
         PreProcessingOperation properation = new PreProcessingOperation(filtroperation.getOutputImage(),contrast,bright,

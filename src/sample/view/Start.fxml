@@ -16,9 +16,9 @@
 
 <AnchorPane prefHeight="363.0" prefWidth="693.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.StartController">
     <children>
-        <SplitPane dividerPositions="0.4126984126984127, 0.5" layoutX="153.0" layoutY="70.0" prefHeight="300.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <SplitPane dividerPositions="0.4126984126984127" layoutX="153.0" layoutY="70.0" prefHeight="363.0" prefWidth="293.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="362.0" prefWidth="100.0" styleClass="background">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="362.0" prefWidth="243.0" styleClass="background">
                     <children>
                         <Label layoutX="104.0" layoutY="51.0" styleClass="label" text="Налаштування досліду" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
                         <GridPane layoutX="14.0" layoutY="26.0" prefHeight="306.0" prefWidth="219.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="49.0" AnchorPane.topAnchor="26.0">
@@ -53,20 +53,7 @@
 
                                 <Button fx:id="researchPathButton" defaultButton="true" mnemonicParsing="false" onAction="#setFullPathName" prefHeight="14.0" prefWidth="63.0" text="OK" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-                                <Label fx:id="ContrastLabel" styleClass="label-bright" text="Контраст" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-                                <TextField fx:id="ContrastField" prefHeight="30.0" prefWidth="125.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-
-                                <Label fx:id="BrightLabel" styleClass="label-bright" text="Яскравість" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="7" />
-                                <TextField fx:id="BrightField" prefHeight="30.0" prefWidth="125.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-
-                                <Label fx:id="DilateLabel" styleClass="label-bright" text="Dilate" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="8" />
-                                <TextField fx:id="DilateField" prefHeight="30.0" prefWidth="125.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-
-                                <Label fx:id="ErodeLabel" styleClass="label-bright" text="Erode" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="9" />
-                                <TextField fx:id="ErodeField" prefHeight="30.0" prefWidth="125.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-
-                                <Label fx:id="HistAverLabel"  text="Сер. знач. гістограми" GridPane.columnIndex="0" GridPane.rowIndex="12" visible="false" />
-                                <Label fx:id="HistAverValueLabel"  text="" GridPane.columnIndex="1" GridPane.rowIndex="12" visible="true" />
+                                <Button fx:id="autoButton" defaultButton="true" mnemonicParsing="false" onAction="#autoSetting" text="Автоматично" visible="true" GridPane.columnIndex="0" GridPane.rowIndex="6" />
 
                             </children>
                         </GridPane>
@@ -76,87 +63,13 @@
                         </ButtonBar>
                     </children>
                 </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="125.0" prefHeight="362.0" prefWidth="130.0" styleClass="background" SplitPane.resizableWithParent="false">
+                <AnchorPane minHeight="0.0" minWidth="525.0" prefHeight="362.0" prefWidth="530.0" styleClass="background" SplitPane.resizableWithParent="false">
                    <children>
-                       <ImageView fx:id="preProcImage" fitHeight="450.0" fitWidth="450.0" layoutX="-15.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" />
-                       <ImageView fx:id="segmentationImage" fitHeight="450.0" fitWidth="450.0" layoutX="-15.0" layoutY="375.0" pickOnBounds="true" preserveRatio="true" />
+                       <ImageView fx:id="originalImage" fitHeight="136.0" fitWidth="173.0" layoutX="8.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+                       <ImageView fx:id="preProcImage"  fitHeight="136.0" fitWidth="173.0" layoutX="494.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView  fx:id="segmentationImage" fitHeight="136.0" fitWidth="173.0" layoutX="8.0" layoutY="361.0" pickOnBounds="true" preserveRatio="true" />
                    </children>
                 </AnchorPane>
-            <AnchorPane prefHeight="362.0" prefWidth="100.0" styleClass="background" SplitPane.resizableWithParent="false">
-                <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" layoutX="20.0" layoutY="20.0">
-                    <children>
-
-
-
-                    </children>
-                </HBox>
-                <GridPane layoutX="30.0" layoutY="38.0" prefHeight="350.0" prefWidth="404.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="218.0" minWidth="10.0" prefWidth="111.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="316.0" minWidth="10.0" prefWidth="261.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <children>
-                        <Label text="Фільтр: " />
-                        <Label fx:id="kSizeLabel"  text="kSize (d): " GridPane.rowIndex="1"/>
-                        <Label fx:id="sigmaLabel" text="sigma" GridPane.rowIndex="2" />
-                        <Label fx:id="sigmaColorLabel" text="sigmaColor" disable="false" GridPane.rowIndex="3" />
-                        <Label fx:id="sigmaSpaceLabel" text="sigmaSpace" disable="false" GridPane.rowIndex="4" />
-
-                        <ComboBox fx:id="comboBox" layoutX="30.0" onAction="#handleComboBoxAction" GridPane.columnIndex="1">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Item 1" />
-                                    <String fx:value="Item 2" />
-                                    <String fx:value="Item 3" />
-                                </FXCollections>
-                            </items>
-                        </ComboBox>
-                        <TextField fx:id="kSizeField" GridPane.columnIndex="1" GridPane.rowIndex="1" disable="true" prefWidth="20.0" />
-                        <TextField fx:id="sigmaField" GridPane.columnIndex="1" GridPane.rowIndex="2" disable="true" prefWidth="10.0"/>
-                        <TextField fx:id="sigmaColorField" GridPane.columnIndex="1" GridPane.rowIndex="3" disable="true" prefWidth="10.0"/>
-                        <TextField fx:id="sigmaSpaceField" GridPane.columnIndex="1" GridPane.rowIndex="4" disable="true" prefWidth="10.0"/>
-
-
-                        <Label text="Сегментація" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-                        <ComboBox fx:id="SegmentationcomboBox" layoutX="30.0" onAction="#handleSegmentationComboBoxAction" GridPane.columnIndex="1" GridPane.rowIndex="6" >
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Item 1" />
-                                    <String fx:value="Item 2" />
-                                    <String fx:value="Item 3" />
-                                </FXCollections>
-                            </items>
-                        </ComboBox>
-
-                        <Label text="Value: " GridPane.columnIndex="0" GridPane.rowIndex="7" />
-                        <Label fx:id="MaxValThresholdLabel" text="MaxValThreshold" GridPane.columnIndex="0" GridPane.rowIndex="8" />
-                        <Label text="SigmaColor" GridPane.columnIndex="0" GridPane.rowIndex="9" />
-                        <Label text="sigmaSpace" GridPane.columnIndex="0" GridPane.rowIndex="10" />
-                        <Label text="delta" GridPane.columnIndex="0" GridPane.rowIndex="11" />
-
-                        <TextField fx:id="ValueField" GridPane.columnIndex="1" GridPane.rowIndex="7" disable="true"/>
-                        <TextField fx:id="MaxValThresholdField" GridPane.columnIndex="1" GridPane.rowIndex="8" disable="true" />
-                        <TextField fx:id="SegSigmaColor" GridPane.columnIndex="1" GridPane.rowIndex="9" disable="true"/>
-                        <TextField fx:id="SegSigmaSpace" GridPane.columnIndex="1" GridPane.rowIndex="10" disable="true"/>
-                        <TextField fx:id="SegDelta" GridPane.columnIndex="1" GridPane.rowIndex="11" disable="true"/>
-
-                        <Button fx:id="correctionButton" mnemonicParsing="false" onAction="#correctionSegmentation" text="Корекція" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="13" />
-
-                        <Button fx:id="setPreProcSettingsButton" defaultButton="true" mnemonicParsing="false" onAction="#handleOk" text="OK" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="15" />
-                        <Button fx:id="saveChangeButton" defaultButton="true" mnemonicParsing="false" onAction="#saveChangeImage" text="Зберегти зміни" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="15" />
-                        <Button fx:id="autoButton" defaultButton="true" mnemonicParsing="false" onAction="#autoSetting" text="Автоматично" visible="true" GridPane.columnIndex="1" GridPane.rowIndex="16" />
-
-                    </children>
-                </GridPane>
-            </AnchorPane>
             </items>
         </SplitPane>
     </children>

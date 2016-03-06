@@ -60,63 +60,19 @@ public class StartController {
 
     @FXML
     private TextField researchPathField;
-    @FXML
-    private TextField ContrastField;
-    @FXML
-    private TextField BrightField;
-    @FXML
-    private TextField  DilateField;
-    @FXML
-    private TextField ErodeField;
-    @FXML
-    private TextField kSizeField;
-    @FXML
-    private TextField sigmaField;
-    @FXML
-    private TextField sigmaSpaceField;
-    @FXML
-    private TextField sigmaColorField;
-    //for Segmentation
-    @FXML
-    private TextField ValueField;
-    @FXML
-    private TextField MaxValThresholdField;
-    @FXML
-    private TextField SegSigmaColor;
-    @FXML
-    private TextField SegSigmaSpace;
-    @FXML
-    private TextField SegDelta;
+
 
     @FXML
     private Label researchName;
     @FXML
     private Label researchPathLabel;
-    @FXML
-    private Label ContrastLabel;
-    @FXML
-    private Label BrightLabel;
-    @FXML
-    private Label DilateLabel;
-    @FXML
-    private Label ErodeLabel;
-    @FXML
-    private Label kSizeLabel;
-    @FXML
-    private Label MaxValThresholdLabel;
-    @FXML
-    private Label sigmaColorLabel;
-    @FXML
-    private Label igmaSpaceLabel;
-    @FXML
-    private Label HistAverLabel;
-    @FXML
-    private Label HistAverValueLabel;
 
     @FXML
     protected ImageView preProcImage;
     @FXML
     protected ImageView segmentationImage;
+    @FXML
+    protected ImageView originalImage;
 
     @FXML
     private ComboBox<FilterColection> comboBox;
@@ -146,28 +102,13 @@ public class StartController {
 
     private String researchname;
     private String researchPath;
-    private String contrast;
-    private String bright;
-    private String dilate;
-    private String erode;
+
 
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
      */
     public StartController(){
-
-        comboBoxData.add(new FilterColection("1", "Гаусівський"));
-        comboBoxData.add(new FilterColection("2", "Білатеральний"));
-        comboBoxData.add(new FilterColection("3", "Адаnтивний біл..."));
-        comboBoxData.add(new FilterColection("4", "Медіанний"));
-
-        comboBoxSegmentationData.add(new SegmentationColection("1", "Порогова"));
-        comboBoxSegmentationData.add(new SegmentationColection("2", "Водорозподілу"));
-        comboBoxSegmentationData.add(new SegmentationColection("3", "k-means"));
-
-
-
     }
 
     /**
@@ -191,52 +132,12 @@ public class StartController {
         this.changedimage = new Mat();
         this.image = new Mat();
         this.planes = new ArrayList<>();
-        comboBox.setItems(comboBoxData);
-        SegmentationcomboBox.setItems(comboBoxSegmentationData);
+
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
-    @FXML
-    private void handleSegmentationComboBoxAction() {
-        SegmentationColection selectedSegMetod = SegmentationcomboBox.getSelectionModel().getSelectedItem();
-        this.selectSegmentation(selectedSegMetod.getId());
-    }
-
-    private void selectSegmentation(String type){
-        if(type == "1"){
-
-            this.segType = "1";
-
-            this.ValueField.setDisable(false);
-            this.MaxValThresholdField.setDisable(false);
-
-            this.SegSigmaColor.setDisable(true);
-            this.SegSigmaSpace.setDisable(true);
-        }else if(type == "2"){
-            this.segType = "2";
-
-            this.MaxValThresholdField.setDisable(true);
-            this.SegDelta.setDisable(false);
-
-            this.ValueField.setDisable(true);
-            this.SegSigmaColor.setDisable(true);
-            this.SegSigmaSpace.setDisable(true);
-
-        }else if(type == "3"){
-            this.segType = "3";
-
-            this.ValueField.setDisable(false);
-            this.SegDelta.setDisable(false);
-
-            this.MaxValThresholdField.setDisable(true);
-            this.SegSigmaColor.setDisable(true);
-            this.SegSigmaSpace.setDisable(true);
-        }
-    }
-
 
     @FXML
     public void setResearchName() throws IOException{
@@ -363,27 +264,7 @@ public class StartController {
             sample.model.Image.setImageMat(this.image);
             Mat newImage = sample.model.Image.getImageMat();
             // show the image
-            this.setPreProcImage(newImage);
-
-
-            saveChangeButton.setVisible(true);
-            ContrastLabel.setVisible(true);
-            ContrastField.setVisible(true);
-            ContrastField.setText("10");
-
-            BrightLabel.setVisible(true);
-            BrightField.setVisible(true);
-            BrightField.setText("11");
-
-            DilateLabel.setVisible(true);
-            DilateField.setVisible(true);
-            DilateField.setText("1");
-
-            ErodeLabel.setVisible(true);
-            ErodeField.setVisible(true);
-            ErodeField.setText("1");
-
-            setPreProcSettingsButton.setVisible(true);
+            this.setOriginalImage(newImage);
 
         }
         else
@@ -403,6 +284,13 @@ public class StartController {
         this.setPreProcImage(sample.model.Image.getImageMat());
     }
 
+    private void setOriginalImage(Mat dst ){
+        this.originalImage.setImage(ImageOperations.mat2Image(dst));
+        this.originalImage.setFitWidth(450.0);
+        this.originalImage.setFitHeight(450.0);
+        this.originalImage.setPreserveRatio(true);
+    }
+
     private void setPreProcImage(Mat dst ){
         this.preProcImage.setImage(ImageOperations.mat2Image(dst));
         this.preProcImage.setFitWidth(450.0);
@@ -415,7 +303,6 @@ public class StartController {
         this.segmentationImage.setFitWidth(450.0);
         this.segmentationImage.setFitHeight(450.0);
         this.segmentationImage.setPreserveRatio(true);
-        this.correctionButton.setVisible(true);
     }
 
     /**
@@ -439,7 +326,6 @@ public class StartController {
             prparam.setResearchPath(researchPathField.getText());
         }
         // called main function for image processing
-        this.mainImageProcessing();
 
         if (errorMessage.length() != 0) {
             // Show the error message.
@@ -453,76 +339,10 @@ public class StartController {
         }
     }
 
-    /**
-     * mainImageProcessing function
-     *
-     */
-    private void mainImageProcessing(){
-
-        // called only OpenCV preprocessing functions
-        PreProcessingOperation properation = new PreProcessingOperation(this.image,ContrastField.getText(),
-                BrightField.getText(), DilateField.getText(),ErodeField.getText());
-
-        // called only OpenCV filtering functions
-        FiltersOperations filtroperation = new FiltersOperations(properation.getOutputImage(), this.filterType,
-                kSizeField.getText(), sigmaField.getText(), sigmaSpaceField.getText(), sigmaColorField.getText());
-
-        this.setPreProcImage(filtroperation.getOutputImage());//show image after preprocessing and filtering
-
-        //called only segmentation functions
-        if(segType =="1"){
-            SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), this.segType,
-                    ValueField.getText(), MaxValThresholdField.getText());
-
-            SegmentationOperations segoperation_1 = new SegmentationOperations(segoperation.getOutputImage(), this.segType,
-                    ValueField.getText(), MaxValThresholdField.getText());
-            this.setSegmentationImage(segoperation_1.getOutputImage());// show image after segmentation
-            this.changedimage = segoperation_1.getOutputImage();
-        }else{
-            SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), this.segType,
-                    ValueField.getText(), MaxValThresholdField.getText());
-            this.setSegmentationImage(segoperation.getOutputImage());// show image after segmentation
-            this.changedimage = segoperation.getOutputImage();
-        }
-
-
-
-
-    }
-
-
     @FXML
     public void autoSetting(){
         this.autoPreProcFiltersSegmentationSetting();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     @FXML
     public void autoPreProcFiltersSegmentationSetting(){
@@ -808,6 +628,8 @@ public class StartController {
     public void setImageParam(Mat dst, String contrast, String bright, String dilate, String erode){
 
         FiltersOperations filtroperation = new FiltersOperations(dst, "4", "9", "", "", "");
+
+
         PreProcessingOperation properation = new PreProcessingOperation(filtroperation.getOutputImage(),contrast,bright,
                 dilate, erode);
 
@@ -883,190 +705,7 @@ public class StartController {
 
 
 
-    public void checkHistogram(){
 
-            System.out.println("Res " + Estimate.checkHistogramValues());
-
-            if(Estimate.checkHistogramValues() == true){
-                System.out.println("??????????????????????????????????????????????????????????????????????????????????????????");
-
-
-                if(Estimate.getSecondHistAverageValue() >12 && Estimate.getSecondHistAverageValue()<=20){
-                    this.auto("11", "15","1","10");
-                }
-                if(Estimate.getSecondHistAverageValue() >20 && Estimate.getSecondHistAverageValue()<32){
-                    this.auto("11", "16","3","1");
-                }
-                if(Estimate.getSecondHistAverageValue() >35 && Estimate.getSecondHistAverageValue()<41){
-                    this.auto("11", "15","1","2");
-                }
-                if(Estimate.getSecondHistAverageValue() >42 && Estimate.getSecondHistAverageValue()<51){
-                    this.auto("11", "5","1","1");
-                }
-                if(Estimate.getSecondHistAverageValue() >52){
-                    this.auto("11", "15","1","1");
-                }
-                else{
-                    this.auto("11", "15","1","1");
-                }
-
-
-
-
-
-            }else{
-                System.out.println("//////////////////////////////////////////////////////////////////////////////////////////");
-
-
-
-                if(Estimate.getSecondHistAverageValue() > 58 && Estimate.getSecondHistAverageValue() < 68){
-                    this.auto("11", "5","2","1");
-                }
-                if(Estimate.getSecondHistAverageValue() >110 && Estimate.getSecondHistAverageValue() <= 140){
-                    this.auto("11", "22","2","1");
-
-                }
-                if(Estimate.getSecondHistAverageValue() >140 && Estimate.getSecondHistAverageValue() < 149){
-                    this.auto("11", "11","1","5");
-
-                }
-
-                if(Estimate.getSecondHistAverageValue() >= 149){
-                    this.auto("11", "9","1","1");
-
-                }
-
-
-                else{
-                    this.auto("11", "9","1","1");
-
-                }
-
-            }
-
-    }
-
-
-    /**
-     public void checkHistogram(){
-
-     System.out.println("Res " + Estimate.checkHistogramValues());
-
-     if(Estimate.checkHistogramValues() == true){
-     System.out.println("??????????????????????????????????????????????????????????????????????????????????????????");
-
-
-     if(Estimate.getSecondHistAverageValue() >12 && Estimate.getSecondHistAverageValue()<=20){
-     this.auto("11", "15","1","10");
-     }
-     if(Estimate.getSecondHistAverageValue() >20 && Estimate.getSecondHistAverageValue()<32){
-     this.auto("11", "16","3","1");
-     }
-     if(Estimate.getSecondHistAverageValue() >35 && Estimate.getSecondHistAverageValue()<41){
-     this.auto("11", "15","1","2");
-     }
-     if(Estimate.getSecondHistAverageValue() >42 && Estimate.getSecondHistAverageValue()<51){
-     this.auto("11", "5","1","1");
-     }
-     if(Estimate.getSecondHistAverageValue() >52){
-     this.auto("11", "15","1","1");
-     }
-     else{
-     this.auto("11", "15","1","1");
-     }
-
-
-
-
-
-     }else{
-     System.out.println("//////////////////////////////////////////////////////////////////////////////////////////");
-
-
-
-     if(Estimate.getSecondHistAverageValue() > 58 && Estimate.getSecondHistAverageValue() < 68){
-     this.auto("11", "5","2","1");
-     }
-     if(Estimate.getSecondHistAverageValue() >110 && Estimate.getSecondHistAverageValue() <= 140){
-     this.auto("11", "22","2","1");
-
-     }
-     if(Estimate.getSecondHistAverageValue() >140 && Estimate.getSecondHistAverageValue() < 149){
-     this.auto("11", "11","1","5");
-
-     }
-
-     if(Estimate.getSecondHistAverageValue() >= 149){
-     this.auto("11", "9","1","1");
-
-     }
-
-
-     else{
-     this.auto("11", "9","1","1");
-
-     }
-
-     }
-
-     }
-     */
-
-
-    @FXML
-    public void auto(String contrast, String bright, String dilate, String erode){
-
-        /*String contrast ="11";
-        String bright ="15";
-        String dilate ="1";
-        String erode="1";*/
-        //this.setSegmentationImage(this.image);
-        this.image = sample.model.Image.getImageMat();
-
-
-
-        PreProcessingOperation properation = new PreProcessingOperation(this.image,contrast,
-                bright, dilate,erode);
-
-        // called only OpenCV filtering functions
-        FiltersOperations filtroperation = new FiltersOperations(properation.getOutputImage(), "3",
-                "27", "", "", "");
-        this.setSegmentationImage(filtroperation.getOutputImage());//show image after preprocessing and filtering
-
-
-
-
-
-        SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), "3",
-                ValueField.getText(), MaxValThresholdField.getText());
-
-        filtroperation.getOutputImage().release();
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        SegmentationOperations segoperation_1 = new SegmentationOperations(segoperation.getOutputImage(), "1",
-                "200", "255");
-
-        segoperation.getOutputImage().release();
-
-
-        //this.checkHistogram();
-
-        SegmentationOperations segoperation_2 = new SegmentationOperations(segoperation_1.getOutputImage(), "1",
-                "220", "255");
-
-        segoperation_1.getOutputImage().release();
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //this.setPreProcImage(segoperation.getOutputImage());
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-         //this.setSegmentationImage(segoperation_2.getOutputImage());// show image after segmentation
-
-        this.saveChangeImage();
-
-    }
 
 
 
@@ -1077,50 +716,9 @@ public class StartController {
         return okClicked;
     }
 
-    /**
-     * Filter ComboBox listener
-     */
-    @FXML
-    private void handleComboBoxAction() {
-        FilterColection selectedFilter = comboBox.getSelectionModel().getSelectedItem();
-        this.selectFilter(selectedFilter.getId());
-    }
 
-    private void selectFilter(String type){
-        if(type == "1"){
 
-            this.filterType = "1";
-            this.kSizeField.setDisable(false);
-            this.sigmaField.setDisable(false);
 
-            this.sigmaColorField.setDisable(true);
-            this.sigmaSpaceField.setDisable(true);
-        }else if(type == "2"){
-
-            this.filterType = "2";
-            this.sigmaField.setDisable(true);
-            this.kSizeField.setDisable(false);
-            this.sigmaColorField.setDisable(false);
-            this.sigmaSpaceField.setDisable(false);
-
-        }else if(type == "3"){
-
-            this.filterType = "3";
-            this.kSizeField.setDisable(false);
-            this.sigmaField.setDisable(true);
-            this.sigmaColorField.setDisable(true);
-            this.sigmaSpaceField.setDisable(false);
-
-        }else if(type == "4"){
-
-            this.filterType = "4";
-            this.kSizeField.setDisable(false);
-            this.sigmaField.setDisable(true);
-            this.sigmaColorField.setDisable(true);
-            this.sigmaSpaceField.setDisable(true);
-
-        }
-    }
 
     @FXML
     private void handleDBConnect() {

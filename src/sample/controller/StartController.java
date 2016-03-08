@@ -422,7 +422,12 @@ public class StartController {
 
         /** for very blue **/
 
-        if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 140){
+        if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 83 && Estimate.getRedAverage() > 140){
+            System.out.println ("39");
+            this.setImageParam(dst, "1","20","1","2");
+        }
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 140){
             System.out.println ("38");
             this.setImageParam(dst, "1","25","1","2");
         }
@@ -434,14 +439,26 @@ public class StartController {
 
 
 
+
+
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 115){
-            System.out.println ("36");
-            this.setImageParam(dst, "1","10","1","2");
+            System.out.println ("41");
+            this.setImageParam(dst, "1","20","1","2");
+        }
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 120 && Estimate.getRedAverage() > 130){
+            System.out.println ("43");
+            this.setImageParam(dst, "1","25","2","2");
+        }
+
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 120 && Estimate.getRedAverage() > 115){
+            System.out.println ("42");
+            this.setImageParam(dst, "1","20","2","4");
         }
 
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130 && Estimate.getRedAverage() > 90){
             System.out.println ("35");
-            this.setImageParam(dst, "1","20","2","2");
+            this.setImageParam(dst, "1","23","2","2");
         }
 
         else if(tempBrightValue < 0.9 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() < 100
@@ -454,7 +471,7 @@ public class StartController {
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 90){
             System.out.println ("29");
 
-            this.setImageParam(dst, "1","27","2","2");
+            this.setImageParam(dst, "1","20","1","6");
         }
 
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 100){
@@ -485,7 +502,7 @@ public class StartController {
         else if(tempBrightValue > 1.1 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 160){
             System.out.println ("16");
 
-            this.setImageParam(dst, "1","29","23","1");
+            this.setImageParam(dst, "1","25","20","1");
 
         }
 
@@ -616,7 +633,7 @@ public class StartController {
 
         else if(tempBrightValue <= 0.9 && Estimate.getFirstHistAverageValue() < 100 && Estimate.getRedAverage() >= 110) {
             System.out.println ("25");
-            this.setImageParam(dst, "1","13","1","3");//6-br
+            this.setImageParam(dst, "1","5","1","3");//6-br
 
         }
 
@@ -759,13 +776,12 @@ public class StartController {
         FiltersOperations filtroperation = new FiltersOperations(dst, "4", "9", "", "", "");
         PreProcessingOperation properation = new PreProcessingOperation(filtroperation.getOutputImage(),"1.1","10",
                 "1", "1");
-
         filtroperation.getOutputImage().release();*/
 
         SegmentationOperations segoperation_1 = new SegmentationOperations(dst, "1",
                 "0", "10");
 
-       // properation.getOutputImage().release();
+        // properation.getOutputImage().release();
 
         this.setSegmentationImage(segoperation_1.getOutputImage());
 
@@ -882,17 +898,13 @@ public class StartController {
     @FXML
     public void saveChangeFile()throws
             ClassNotFoundException,SQLException {
-
         Connection con;
         Statement stmt;
         ResultSet rs;
         Connection c = DB.connect("127.0.0.1","3306","ki","root","oleh123");
         stmt = c.createStatement();
-
         String query = "select id, name, surname from users";
-
         rs = stmt.executeQuery(query);
-
         while (rs.next()) {
             int id = rs.getInt(1);
             String name = rs.getString(2);
@@ -908,7 +920,6 @@ public class StartController {
     /*
     private void rangeValues(String field, String fieldType){
         String[] rangeValue = field.split("-");
-
         if(rangeValue.length == 3){
             this.rangeFlag = fieldType;
             this.firstValue = Integer.parseInt(rangeValue[0]);
@@ -916,7 +927,6 @@ public class StartController {
             this.step = Integer.parseInt(rangeValue[2]);
         }
         else {
-
             if(fieldType.compareTo("Contrast") == 0) {
                 this.contrast = rangeValue[0];
             }

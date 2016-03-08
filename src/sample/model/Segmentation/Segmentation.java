@@ -282,11 +282,15 @@ public class Segmentation{
             rgba.convertTo(rgba, -1, 10d * 15 / 100, 0);
         }
 
-
+        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 83 && Estimate.getRedAverage() > 140 ){
+            rgba.convertTo(rgba, -1, 10d * 20 / 100, 0);
+        }
 
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 130) {
             rgba.convertTo(rgba, -1, 10d * 15 / 100, 0);
         }
+
+
 
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 100) {
             rgba.convertTo(rgba, -1, 10d * 5 / 100, 0);

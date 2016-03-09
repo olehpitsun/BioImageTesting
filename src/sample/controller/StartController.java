@@ -631,6 +631,20 @@ public class StartController {
 
         }
 
+        else if(tempBrightValue <= 0.1 && Estimate.getFirstHistAverageValue() < 40 && Estimate.getRedAverage() >= 200 && Estimate.getBlueAverage() >= 100) {
+            System.out.println ("45");
+            this.setImageParam(dst, "1","5","1","1");//6-br
+
+        }
+
+        else if(tempBrightValue <= 0.1 && Estimate.getFirstHistAverageValue() < 100 && Estimate.getBlueAverage() >= 210 && Estimate.getRedAverage() >= 210) {
+            System.out.println ("46");
+
+            //thresholdSegmentation(dst);
+            this.setImageParam(dst, "1","15","1","1");//6-br
+
+        }
+
         else if(tempBrightValue <= 0.9 && Estimate.getFirstHistAverageValue() < 100 && Estimate.getRedAverage() >= 110) {
             System.out.println ("25");
             this.setImageParam(dst, "1","5","1","3");//6-br
@@ -680,6 +694,12 @@ public class StartController {
         }
 
 
+        else if(tempBrightValue <= 0.5 && Estimate.getRedAverage() > 190 && Estimate.getBlueAverage()>100) {
+            System.out.println ("43");
+            //thresholdSegmentation(dst);
+            this.setImageParam(dst, "1","15","1","1");
+
+        }
 
         else if(tempBrightValue > 0.8 && tempBrightValue < 2 && Estimate.getBlueAverage() > 100 && Estimate.getRedAverage() > 100){
             System.out.println ("33");

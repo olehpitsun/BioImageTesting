@@ -13,7 +13,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.*?>
 
+<?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="363.0" prefWidth="693.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.StartController">
     <children>
         <SplitPane dividerPositions="0.4126984126984127" layoutX="153.0" layoutY="70.0" prefHeight="363.0" prefWidth="293.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -61,6 +63,17 @@
                                 <Label  fx:id="psnrLabel" styleClass="label-bright" text="PSNR" GridPane.columnIndex="0" GridPane.rowIndex="8" />
                                 <Label  fx:id="psnrResLabel" styleClass="label-bright" text="" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 
+                                <Label text= "My Image" id = "labelwithimage" style="-fx-graphic:url('images/image.png'); -fx-graphic-text-gap : 10;"/>
+
+
+                                <Button fx:id="researchButton" layoutX="104.0" layoutY="81.0" mnemonicParsing="false" text="Love&#10;Potion" onAction="#handleDBConnect">
+                                    <font>
+                                        <Font name="Avenir Next Regular" size="13.0" />
+                                    </font>
+                                    <graphic>
+
+                                    </graphic>
+                                </Button>
                             </children>
                         </GridPane>
                         <ButtonBar layoutX="54.0" layoutY="250.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">

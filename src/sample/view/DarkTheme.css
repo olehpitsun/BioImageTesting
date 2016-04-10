@@ -40,10 +40,10 @@
     -fx-size: 35;
     -fx-border-width: 0 0 1 0;
     -fx-background-color: transparent;
-    -fx-border-color: 
+    -fx-border-color:
         transparent
         transparent
-        derive(-fx-base, 80%) 
+        derive(-fx-base, 80%)
         transparent;
     -fx-border-insets: 0 10 1 0;
 }
@@ -94,11 +94,84 @@
     -fx-font-width: 20;
 }
 
-/* 
+/*
  * Metro style Push Button
  * Author: Pedro Duque Vieira
  * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
  */
+#researchButton  {
+
+    -fx-min-height: 50px;
+
+    -fx-min-width: 140px;
+
+    -fx-background-image: url("images/key.png");
+
+    -fx-background-size: 50px 50px;
+
+    -fx-background-repeat: no-repeat;
+
+
+}
+#registrationButton{
+    -fx-min-height: 50px;
+
+    -fx-min-width: 160px;
+
+    -fx-background-image: url("images/add_user.png");
+
+    -fx-background-size: 50px 50px;
+
+    -fx-background-repeat: no-repeat;
+}
+#settingsButton{
+    -fx-min-height: 50px;
+    -fx-min-width: 200px;
+    -fx-background-image: url("images/process.png");
+    -fx-background-size: 50px 50px;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: #1d1d1d;
+
+}
+#webcamButton{
+    -fx-min-height: 50px;
+    -fx-min-width: 220px;
+    -fx-background-image: url("images/webcam.png");
+    -fx-background-size: 50px 50px;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: #1d1d1d;
+}
+#photoCameraButton{
+    -fx-min-height: 50px;
+    -fx-min-width: 200px;
+    -fx-background-image: url("images/photo_camera.png");
+    -fx-background-size: 50px 50px;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: #1d1d1d;
+}
+#address_bookButton{
+    -fx-min-height: 50px;
+    -fx-min-width: 170px;
+    -fx-background-image: url("images/address_book.png");
+    -fx-background-size: 50px 50px;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: #1d1d1d;
+}
+
+#pacientButton{
+    -fx-min-height: 100px;
+    -fx-min-width: 350px;
+    -fx-background-image: url("images/id_card.png");
+    -webkit-fx-background-image-: 300px;
+    -moz-fx-background-image-: 300px;
+    -ms-fx-background-image-: 300px;
+    -o-fx-background-image-: 300px;
+    fx-background-image-: 300px;
+    -fx-background-size: 100px 100px;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: #1d1d1d;
+}
+
 .button {
     -fx-padding: 3 10 3 10;
     -fx-border-color: #e2e2e2;

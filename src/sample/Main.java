@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
+import sample.controller.MainPageController;
 import sample.controller.StartController;
 import sample.view.*;
 
@@ -41,7 +42,8 @@ public class Main extends Application {
         this.primaryStage.getIcons().add(new Image("file:resources/images/address_book_32.png"));
 
         initRootLayout();
-        startProcessing();
+        MainPage();
+        //startProcessing();
         //showPreprocessing();
     }
 
@@ -66,6 +68,25 @@ public class Main extends Application {
             controller.setMainApp(this);
 
             primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void MainPage(){
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("view/MainPage.fxml"));
+            AnchorPane PreProcessing = (AnchorPane) loader.load();
+
+            // Set person overview into the center of root layout.
+            rootLayout.setCenter(PreProcessing);
+
+            // Give the controller access to the main app.
+            MainPageController controller = loader.getController();
+            controller.setMainApp(this);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -2,57 +2,44 @@ package sample.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import org.opencv.core.Point;
-import org.opencv.highgui.Highgui;
-import org.opencv.imgproc.Imgproc;
-import sample.Main;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.*;
-import sample.core.DB;
+import org.opencv.core.Point;
+import org.opencv.highgui.Highgui;
+import org.opencv.imgproc.Imgproc;
+import sample.Main;
 import sample.model.Estimate.Psnr;
 import sample.model.Filters.FilterColection;
+import sample.model.Filters.FiltersOperations;
+import sample.model.PreProcessing.PreProcessingOperation;
+import sample.model.PreProcessing.StartImageParams;
+import sample.model.Segmentation.SegmentationColection;
+import sample.model.Segmentation.SegmentationOperations;
+import sample.tools.ImageOperations;
+import sample.util.Estimate;
+import sample.util.PreProcessingParam;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-import sample.model.Filters.FiltersOperations;
-import sample.model.HistogramEQ;
-import sample.model.PreProcessing.PreProcessingOperation;
-import sample.model.PreProcessing.StartImageParams;
-import sample.model.Segmentation.SegmentationColection;
-import sample.model.Segmentation.SegmentationOperations;
-import sample.tools.ImageOperations;
-import sample.tools.ValidateOperations;
-import sample.util.Estimate;
-import sample.util.PreProcessingParam;
-
-import javax.imageio.ImageIO;
-
-public class StartController {
+public class MainPageController {
 
     @FXML
     private Button researchNameButton;
@@ -136,7 +123,7 @@ public class StartController {
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public StartController() {
+    public MainPageController() {
     }
 
     /**
@@ -273,7 +260,7 @@ public class StartController {
         //ImageViwer.viewImage(histImage);
     }
 
-    public void chooseFile(ActionEvent actionEvent) throws java.io.IOException {
+    public void chooseFile(ActionEvent actionEvent) throws IOException {
 
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Open File");

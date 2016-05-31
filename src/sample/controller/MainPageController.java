@@ -2,57 +2,45 @@ package sample.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import org.opencv.core.Point;
-import org.opencv.highgui.Highgui;
-import org.opencv.imgproc.Imgproc;
-import sample.Main;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.*;
-import sample.core.DB;
+import org.opencv.core.Point;
+import org.opencv.highgui.Highgui;
+import org.opencv.imgproc.Imgproc;
+import sample.Main;
 import sample.model.Estimate.Psnr;
 import sample.model.Filters.FilterColection;
+import sample.model.Filters.FiltersOperations;
+import sample.model.Pacient;
+import sample.model.PreProcessing.PreProcessingOperation;
+import sample.model.PreProcessing.StartImageParams;
+import sample.model.Segmentation.SegmentationColection;
+import sample.model.Segmentation.SegmentationOperations;
+import sample.tools.ImageOperations;
+import sample.util.Estimate;
+import sample.util.PreProcessingParam;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-import sample.model.Filters.FiltersOperations;
-import sample.model.HistogramEQ;
-import sample.model.PreProcessing.PreProcessingOperation;
-import sample.model.PreProcessing.StartImageParams;
-import sample.model.Segmentation.SegmentationColection;
-import sample.model.Segmentation.SegmentationOperations;
-import sample.tools.ImageOperations;
-import sample.tools.ValidateOperations;
-import sample.util.Estimate;
-import sample.util.PreProcessingParam;
-
-import javax.imageio.ImageIO;
-
-public class StartController {
+public class MainPageController {
 
     @FXML
     private Button researchNameButton;
@@ -67,6 +55,8 @@ public class StartController {
     @FXML
     private Button correctionButton;
 
+    @FXML
+    public Button qwert;
     @FXML
     private TextField researchNameField;
 
@@ -85,6 +75,12 @@ public class StartController {
     protected ImageView segmentationImage;
     @FXML
     protected ImageView originalImage;
+
+    @FXML
+    private TableView<Pacient> pacientTable;
+    @FXML
+    private TableColumn<Pacient, String> pacientSurnameColumn, pacientNameColumn, pacientMiddleNameColumn,
+            pacientIDColumn;
 
     @FXML
     private ComboBox<FilterColection> comboBox;
@@ -121,16 +117,26 @@ public class StartController {
     private float meanSquaredError;
     private double psnr;
 
+    private ObservableList<Pacient> pacientData = FXCollections.observableArrayList();
+    private ObservableList<Pacient> getPacientData() {
+        return pacientData;
+    }
+
+    @FXML
+    public Image img;
     @FXML
     private Label mseResLabel;
     @FXML
     private Label psnrResLabel;
 
+    @FXML
+    public ImageView imgview;
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public StartController(){
+    public MainPageController() {
+
     }
 
     /**
@@ -141,6 +147,9 @@ public class StartController {
     public void setMainApp(Main mainApp) {
 
         this.mainApp = mainApp;
+
+        setTableData();
+
     }
 
     /**
@@ -155,10 +164,48 @@ public class StartController {
         this.image = new Mat();
         this.planes = new ArrayList<>();
 
+        pacientSurnameColumn.setCellValueFactory(cellData -> cellData.getValue().pacientSurnameProperty());
+        pacientNameColumn.setCellValueFactory(cellData -> cellData.getValue().pacientNameProperty());
+        pacientMiddleNameColumn.setCellValueFactory(cellData -> cellData.getValue().pacientMiddleNameProperty());
+        pacientIDColumn.setCellValueFactory(cellData -> cellData.getValue().pacientCartIdProperty());
+
+
+
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
+        //qwert.setText('\uf040' + "");
+        setTableData();
+
+
+    }
+
+    @FXML
+    public void setTableData(){
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Sd ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петcdsvренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петvdsренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петрsdvенко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петcdsvренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петvdsренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петрsdvенко ","Петро","Петрович", "12345ee"));
+        pacientData.add(new Pacient("Петренко ","Петро","Петрович", "12345ee"));
+        pacientTable.setItems(getPacientData());
     }
 
     @FXML
@@ -264,7 +311,7 @@ public class StartController {
         //ImageViwer.viewImage(histImage);
     }
 
-    public void chooseFile(ActionEvent actionEvent) throws java.io.IOException {
+    public void chooseFile(ActionEvent actionEvent) throws IOException {
 
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Open File");
@@ -397,288 +444,9 @@ public class StartController {
 
     @FXML
     public void autoSetting(){
-        this.autoPreProcFiltersSegmentationSetting();
+        //this.autoPreProcFiltersSegmentationSetting();
     }
 
-    @FXML
-    public void autoPreProcFiltersSegmentationSetting(){
-
-        Mat dst = new Mat();
-        Mat testDst = new Mat();
-
-        this.image.copyTo(dst);
-        this.image.copyTo(testDst);
-
-        /** use testing parametrs for getting HistAverValue **/
-        PreProcessingOperation properation = new PreProcessingOperation(testDst,"1","15", "1", "1");
-
-        SegmentationOperations segoperation = new SegmentationOperations(properation.getOutputImage(), "3",
-                "0", "0");
-        testDst.release();//clear memory
-        properation.getOutputImage().release();
-
-
-        float tempBrightValue = Estimate.getBrightVal();
-
-        /** for very blue **/
-
-        if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 140){
-            System.out.println ("38");
-            this.setImageParam(dst, "1","25","1","2");
-        }
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 135){
-            System.out.println ("37");
-            this.setImageParam(dst, "1","25","1","2");
-        }
-
-
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 115){
-            System.out.println ("36");
-            this.setImageParam(dst, "1","10","1","2");
-        }
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130 && Estimate.getRedAverage() > 90){
-            System.out.println ("35");
-            this.setImageParam(dst, "1","18","2","2");
-        }
-
-        else if(tempBrightValue < 0.9 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() < 100
-                ){
-            System.out.println ("36");
-
-            this.setImageParam(dst, "1","10","2","2");
-        }
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 90){
-            System.out.println ("29");
-
-            this.setImageParam(dst, "1","27","2","2");
-        }
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 100){
-            System.out.println ("1");
-
-            this.setImageParam(dst, "1","17","2","2");
-        }
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 200 && Estimate.getRedAverage() < 100){
-            System.out.println ("6");
-
-            this.setImageParam(dst, "1","15","10","10");
-        }
-
-        else if(tempBrightValue > 1.5 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 220){
-            System.out.println ("13");
-
-            this.setImageParam(dst, "1","16","1","2");
-
-        }
-
-        else if(tempBrightValue > 1.5 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 100){
-            System.out.println ("23");
-
-            this.setImageParam(dst, "1","13","1","5");
-
-        }
-
-        else if(tempBrightValue > 1.1 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 160){
-            System.out.println ("16");
-
-            this.setImageParam(dst, "1","29","23","1");
-
-        }
-
-        else if(tempBrightValue > 1.1 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 140){
-            System.out.println ("21");
-
-            this.setImageParam(dst, "1","19","15","1");
-
-        }
-
-        else if(tempBrightValue > 1.1 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 100){
-            System.out.println ("11");
-
-            this.setImageParam(dst, "1","19","1","1");
-
-        }
-
-        else if(tempBrightValue > 1 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 100){
-            System.out.println ("31");
-
-            this.setImageParam(dst, "1","22","1","1");
-
-        }
-
-        else if(tempBrightValue > 1 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 130){
-            System.out.println ("30");
-
-            this.setImageParam(dst, "1","10","1","3");
-
-        }
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 120 && Estimate.getRedAverage() > 100
-                && Estimate.getSecondHistAverageValue() > 140){
-            System.out.println ("32");
-
-            this.setImageParam(dst, "1","22","1","3");
-
-        }
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getRedAverage() > 100){
-            System.out.println ("2");
-
-            this.setImageParam(dst, "1","15","1","3");
-
-        }
-
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130
-                && Estimate.getFirstHistAverageValue() >100){
-            System.out.println ("20");
-
-            this.setImageParam(dst, "1","20","1","1");
-
-        }
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 90 && Estimate.getRedAverage() > 130
-                && Estimate.getSecondHistAverageValue() >110){
-            System.out.println ("17");
-
-            this.setImageParam(dst, "1","11","1","9");
-
-        }
-
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 100 && Estimate.getRedAverage() > 130
-                && Estimate.getSecondHistAverageValue() >45){
-            System.out.println ("27");
-
-            this.setImageParam(dst, "1","18","9","1");
-        }
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130 && Estimate.getRedAverage() > 130
-                && Estimate.getSecondHistAverageValue() >165){
-            System.out.println ("22");
-
-            this.setImageParam(dst, "1","32","17","1");
-
-        }
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130 && Estimate.getRedAverage() > 130
-                && Estimate.getSecondHistAverageValue() >110){
-            System.out.println ("15");
-
-            this.setImageParam(dst, "1","33","8","1");
-
-        }
-
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130
-                && Estimate.getFirstHistAverageValue() >55){
-            System.out.println ("29");
-
-            this.setImageParam(dst, "1","17","6","1");
-
-        }
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130
-                && Estimate.getFirstHistAverageValue() >55){
-            System.out.println ("28");
-
-            this.setImageParam(dst, "1","18","6","1");
-
-        }
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130
-                && Estimate.getFirstHistAverageValue() >20){
-            System.out.println ("18");
-
-            this.setImageParam(dst, "1","18","1","1");
-
-        }
-
-
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 130
-                && Estimate.getSecondHistAverageValue() >20){
-            System.out.println ("3");
-
-            this.setImageParam(dst, "1","21","3","1");
-
-        }
-
-
-        else if(tempBrightValue <= 0.9 && Estimate.getFirstHistAverageValue() < 100 && Estimate.getRedAverage() < 80) {
-            System.out.println ("8");
-            this.setImageParam(dst, "1","9","25","11");
-
-        }
-
-        else if(tempBrightValue <= 0.9 && Estimate.getFirstHistAverageValue() < 100 && Estimate.getRedAverage() >= 110) {
-            System.out.println ("25");
-            this.setImageParam(dst, "1","13","1","3");//6-br
-
-        }
-
-        else if(tempBrightValue <= 0.9 && Estimate.getFirstHistAverageValue() < 100 && Estimate.getRedAverage() >= 80) {
-            System.out.println ("9");
-            this.setImageParam(dst, "1","8","23","1");
-
-        }
-
-        else if(tempBrightValue <= 0.9 && Estimate.getFirstHistAverageValue()>100 && Estimate.getRedAverage() < 80) {
-            System.out.println ("4");
-            this.setImageParam(dst, "1","9","25","11");
-
-        }
-
-        else if(tempBrightValue <= 0.9 && tempBrightValue >= 0.5 && Estimate.getFirstHistAverageValue()>100 && Estimate.getRedAverage() > 100) {
-            System.out.println ("19");
-            this.setImageParam(dst, "1","15","14","11");
-
-        }
-
-
-        else if(tempBrightValue <= 0.5 && Estimate.getRedAverage() > 170 && Estimate.getRedAverage()<190 && Estimate.getBlueAverage()>205
-                && Estimate.getBlueAverage()<225) {
-            System.out.println ("40");
-            //thresholdSegmentation(dst);
-            this.setImageParam(dst, "1","20","1","1");
-
-        }
-
-        else if(tempBrightValue <= 0.5 && Estimate.getRedAverage() > 140 && Estimate.getBlueAverage()>200
-                && Estimate.getFirstHistAverageValue() > 120) {
-            System.out.println ("41");
-            thresholdSegmentation(dst);
-            //this.setImageParam(dst, "1","20","1","1");
-
-        }
-
-        else if(tempBrightValue <= 0.5 && Estimate.getFirstHistAverageValue()>130 && Estimate.getRedAverage() > 170 && Estimate.getBlueAverage()>170) {
-            System.out.println ("24");
-            thresholdSegmentation(dst);
-            //this.setImageParam(dst, "1","1","1","1");
-
-        }
-
-
-
-        else if(tempBrightValue > 0.8 && tempBrightValue < 2 && Estimate.getBlueAverage() > 100 && Estimate.getRedAverage() > 100){
-            System.out.println ("33");
-
-            this.setImageParam(dst, "1","20","5","1");
-
-        }
-
-
-
-        else {
-            this.setImageParam(dst, "1","15","1","1");
-            System.out.println ("else");
-        }
-
-    }
 
 
     /**
@@ -708,81 +476,50 @@ public class StartController {
      */
     public void setImageParam(Mat dst, String contrast, String bright, String dilate, String erode){
 
-        //FiltersOperations filtroperation = new FiltersOperations(dst, "4", "9", "", "", "");
+        FiltersOperations filtroperation = new FiltersOperations(dst, "1", "21", "1", "", "");
 
 
 
+        // save image on disk
+        String path ="";
+        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        Highgui.imwrite( path + timeStamp + ".png", filtroperation.getOutputImage());
+        generatedImagePath = path + timeStamp + ".png";
+        this.compareImages();// call to compare function
+        // delete temp filtered image
+        ImageOperations.deleteFile(path + timeStamp + ".png");
 
 
 
+/*
+        PreProcessingOperation properation = new PreProcessingOperation(filtroperation.getOutputImage(),contrast,bright,
+                dilate, erode);
 
-        //PreProcessingOperation properation = new PreProcessingOperation(filtroperation.getOutputImage(),contrast,bright,
-              // dilate, erode);
+        filtroperation.getOutputImage().release();*/
 
-        //filtroperation.getOutputImage().release();
-
-        //this.setPreProcImage(properation.getOutputImage());
+        this.setPreProcImage(filtroperation.getOutputImage());
 
 
-        SegmentationOperations segoperation = new SegmentationOperations(dst, "3",
+        SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), "3",
                 "0", "0");
 
-
-
-
-
-
-
-
-
-
-
-
-       // properation.getOutputImage().release();
-        //this.setSegmentationImage(cannyDetection(dst,5));
+        //properation.getOutputImage().release();
+        this.setSegmentationImage(segoperation.getOutputImage());
 
         SegmentationOperations segoperation_1 = new SegmentationOperations(segoperation.getOutputImage(), "1",
                 "200", "255");
-        //Imgproc.threshold(dst, dst, 150, 255, Imgproc.THRESH_BINARY);
 
-        this.setSegmentationImage(segoperation_1.getOutputImage());
 
-        //segoperation_1.getOutputImage().release();
+        //this.setSegmentationImage(segoperation_1.getOutputImage());
+
+        segoperation_1.getOutputImage().release();
 
         Estimate.setFirstHistAverageValue(null);
         Estimate.setSecondHistAverageValue(null);
         System.out.println("------------------------------------------------------------------------------------------");
     }
 
-    public  Mat cannyDetection(Mat image, int size){
 
-        Mat grayImage = new Mat();
-        Mat detectedEdges = new Mat();
-        // convert to grayscale
-        Imgproc.cvtColor(image, grayImage, Imgproc.COLOR_BGR2GRAY);
-        // reduce noise with a 3x3 kernel
-        Imgproc.blur(grayImage, detectedEdges, new Size(3, 3));
-        // canny detector, with ratio of lower:upper threshold of 3:1
-        Imgproc.Canny(detectedEdges, detectedEdges, size, size/3, 7, false);
-        return detectedEdges;
-    }
-
-    public Mat Sobel(Mat source, int delta ){
-
-        Mat grey = new Mat();
-        Imgproc.cvtColor(source, grey, Imgproc.COLOR_BGR2GRAY);
-        Mat sobelx = new Mat();
-        Imgproc.Sobel(grey, sobelx, CvType.CV_32F, 1, delta);
-
-        double minVal, maxVal;
-        Core.MinMaxLocResult minMaxLocResult=Core.minMaxLoc(sobelx);
-        minVal=minMaxLocResult.minVal;
-        maxVal=minMaxLocResult.maxVal;
-
-        Mat draw = new Mat();
-        sobelx.convertTo(draw, CvType.CV_8U, 255.0 / (maxVal - minVal), -minVal * 255.0 / (maxVal - minVal));
-        return draw;
-    }
 
     private void thresholdSegmentation(Mat dst){
 

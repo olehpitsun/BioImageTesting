@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="opencv-249">
     <CLASSES>
-      <root url="jar://C:/Myprograms/opencv249/opencv/build/java/opencv-249.jar!/" />
+      <root url="jar://C:/MyPrograms/203/opencv/build/java/opencv-249.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://C:/Myprograms/opencv249/opencv/build/java/opencv-249.jar!/" />
+      <root url="jar://C:/MyPrograms/203/opencv/build/java/opencv-249.jar!/" />
     </SOURCES>
   </library>
 </component>

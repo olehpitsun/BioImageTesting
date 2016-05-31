@@ -92,7 +92,7 @@ public class Segmentation{
 
         //Mat frame = new Mat(image.rows(), image.cols(), image.type());
 
-            frame.convertTo(frame, -1, 10d * 20 / 100, 0);
+        frame.convertTo(frame, -1, 10d * 20 / 100, 0);
 
 
 
@@ -155,33 +155,24 @@ public class Segmentation{
         /*Mat hsvImg = new Mat();
         List<Mat> hsvPlanes = new ArrayList<>();
         Mat thresholdImg = new Mat();
-
         int thresh_type = Imgproc.THRESH_BINARY_INV;
-
         // threshold the image with the average hue value
         hsvImg.create(inputImg.size(), CvType.CV_8U);
         Imgproc.cvtColor(inputImg, hsvImg, Imgproc.COLOR_BGR2HSV);
         Core.split(hsvImg, hsvPlanes);
-
         // get the average hue value of the image
         double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
-
         Imgproc.threshold(hsvPlanes.get(0), thresholdImg, minValue,
                 maxValue, thresh_type);
-
         Imgproc.blur(thresholdImg, thresholdImg, new Size(3, 3));
-
         // dilate to fill gaps, erode to smooth edges
         Imgproc.dilate(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 3);
         Imgproc.erode(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 1);
-
         Imgproc.threshold(thresholdImg, thresholdImg, minValue,
                 maxValue, Imgproc.THRESH_BINARY);
-
         // create the new image
         Mat foreground = new Mat(inputImg.size(), CvType.CV_8UC3, new Scalar(255, 255, 255));
         inputImg.copyTo(foreground, thresholdImg);
-
         Core.bitwise_not(foreground,foreground);
         return foreground;*/
     }
@@ -201,16 +192,16 @@ public class Segmentation{
         Imgproc.cvtColor(inputImg, grayScale, Imgproc.COLOR_BGR2GRAY);
 
         //constructing a 3x3 kernel for morphological opening
-        Mat openingKernel = Mat.ones(9,9, CvType.CV_8U);
+        //Mat openingKernel = Mat.ones(9,9, CvType.CV_8U);
 
         // яскравість
         //target.convertTo(target, -1, 10d * 12 / 100, 0);
         //Imgproc.dilate(target, target, new Mat(), new Point(-1, -1), 1);
 
-        Size s = new Size(27, 27);
+        Size s = new Size(3, 3);
         Imgproc.GaussianBlur(target, target, s, 1.7);
 
-        Imgproc.morphologyEx(target, target, Imgproc.MORPH_OPEN, openingKernel);
+        //Imgproc.morphologyEx(target, target, Imgproc.MORPH_OPEN, openingKernel);
 
         //dilation operation for extracting the background
         //Imgproc.dilate(target, target, openingKernel);
@@ -241,56 +232,36 @@ public class Segmentation{
         // яскравість
 
         /**if(Estimate.getFirstHistAverageValue() !=null && Estimate.getSecondHistAverageValue()!=null &&
-                Estimate.checkHistogramValues() == false) {
-            System.out.println( "Bsd");
-            if(Estimate.getSecondHistAverageValue() >110 && Estimate.getSecondHistAverageValue() < 145){
-                rgba.convertTo(rgba, -1, 10d * 17 / 100, 0);
-            }
-
-
-
-            else{
-                rgba.convertTo(rgba, -1, 10d * 5 / 100, 0);
-            }
-
-
-
-
-
-
-
-
-        }else {
-
-
-            /*
-            if( Estimate.getSecondHistAverageValue()!=null && Estimate.getSecondHistAverageValue() >= 53){
-                System.out.println("URA");
-                rgba.convertTo(rgba, -1, 10d * 38 / 100, 0);
-            }else{
-
-                rgba.convertTo(rgba, -1, 10d * 18 / 100, 0);
-            //}
-
-            System.out.println( "Good");
-
-        }**/
+         Estimate.checkHistogramValues() == false) {
+         System.out.println( "Bsd");
+         if(Estimate.getSecondHistAverageValue() >110 && Estimate.getSecondHistAverageValue() < 145){
+         rgba.convertTo(rgba, -1, 10d * 17 / 100, 0);
+         }
+         else{
+         rgba.convertTo(rgba, -1, 10d * 5 / 100, 0);
+         }
+         }else {
+         /*
+         if( Estimate.getSecondHistAverageValue()!=null && Estimate.getSecondHistAverageValue() >= 53){
+         System.out.println("URA");
+         rgba.convertTo(rgba, -1, 10d * 38 / 100, 0);
+         }else{
+         rgba.convertTo(rgba, -1, 10d * 18 / 100, 0);
+         //}
+         System.out.println( "Good");
+         }**/
 
         float tempBrightValue = Estimate.getBrightVal();
-
+/*
         if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 140 && Estimate.getRedAverage() < 100 ){
             rgba.convertTo(rgba, -1, 10d * 15 / 100, 0);
         }
 
-        else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 83 && Estimate.getRedAverage() > 140 ){
-            rgba.convertTo(rgba, -1, 10d * 20 / 100, 0);
-        }
+
 
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 130) {
             rgba.convertTo(rgba, -1, 10d * 15 / 100, 0);
         }
-
-
 
         else if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() > 130 && Estimate.getBlueAverage() < 185 && Estimate.getRedAverage() < 100) {
             rgba.convertTo(rgba, -1, 10d * 5 / 100, 0);
@@ -338,9 +309,9 @@ public class Segmentation{
             rgba.convertTo(rgba, -1, 10d * 9 / 100, 0);
         }
 
-        else{
-            rgba.convertTo(rgba, -1, 10d * 18 / 100, 0);
-        }
+        else{*/
+            rgba.convertTo(rgba, -1, 10d * 26 / 100, 0);
+       // }
 
         Imgproc.cvtColor(rgba, mHSV, Imgproc.COLOR_RGBA2RGB,3);
         Imgproc.cvtColor(rgba, mHSV, Imgproc.COLOR_RGB2HSV,3);

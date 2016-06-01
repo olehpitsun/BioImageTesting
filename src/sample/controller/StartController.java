@@ -49,6 +49,7 @@ import sample.tools.ImageOperations;
 import sample.tools.ValidateOperations;
 import sample.util.Estimate;
 import sample.util.PreProcessingParam;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -214,6 +215,52 @@ public class StartController {
         loadImageButton.setVisible(true);
     }
 
+
+    public void lineDetect(){
+        Mat img = Highgui.imread("C:\\biomedical images/example_1_skeleton.png");
+
+
+        // generate gray scale and blur
+        Mat gray = new Mat();
+        Imgproc.cvtColor(img, gray, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.blur(gray, gray, new Size(3, 3));
+
+        // detect the edges
+        Mat edges = new Mat();
+        int lowThreshold = 50;
+        int ratio = 3;
+        Imgproc.Canny(gray, edges, lowThreshold, lowThreshold * ratio);
+
+        Mat lines = new Mat();
+
+
+        Imgproc.HoughLinesP(edges, lines, 1, Math.PI / 180, 50, 50, 15);
+
+        for(int i = 0; i < lines.cols(); i++) {
+
+            int randomR = 1 + (int)(Math.random() * ((255 - 1) + 1));
+            int randomG = 1 + (int)(Math.random() * ((255 - 1) + 1));
+            int randomB = 1 + (int)(Math.random() * ((255 - 1) + 1));
+
+            int randomNumbY = 1 + (int)(Math.random() * ((50 - 1) + 1));
+            int randomNumbX = 1 + (int)(Math.random() * ((30 - 1) + 1));
+
+            double[] val = lines.get(0, i);
+            Core.putText(img, Integer.toString(i), new Point(val[0] - randomNumbX ,val[1] - randomNumbY),
+                    Core.FONT_ITALIC, 0.7 ,new  Scalar(randomR,randomG,randomB));
+
+            System.out.println( i + ": " + val[0] + " " + val[1] + " " + val[2] + " " + val[3]);
+            Core.line(img, new Point(val[0], val[1]), new Point(val[2], val[3]), new Scalar(randomR, randomG, randomB), 2);
+
+            //Core.putText(img, Integer.toString(i), new Point(val[2] - randomNumbX ,val[3] - randomNumbY),
+              //      Core.FONT_ITALIC, 0.7 ,new  Scalar(randomR,randomG,randomB));
+        }
+        this.preProcImage.setImage(ImageOperations.mat2Image(img));
+
+        //ImgWindow.newWindow(edges);
+        //ImgWindow.newWindow(gray);
+        //ImgWindow.newWindow(img);
+    }
 
     public void showHisImage(String orImage){
         Mat image = Highgui.imread(orImage);

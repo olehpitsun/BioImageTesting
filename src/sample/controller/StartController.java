@@ -216,8 +216,634 @@ public class StartController {
     }
 
 
+    /**
+     *
+     */
+    //public double[][] Line_1 = new double[10][10];
+    public int div_Num = 3;
+
+    public void startDetect(){
+
+
+        double[][] Line_1 = {
+                {171, 339},
+                {208, 353},
+                {246, 367},
+                {284, 382}
+
+        };
+
+        double[][] Line_2 = {
+                {49, 535},
+                {15,346},
+                {50,422},
+                {80,447},
+
+        };
+
+        double Distance1, Distance2, Distance3, Distance4;
+
+
+        if(div_Num == 1){
+            Distance1 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[0][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[1][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 2 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[0][0]),2) + Math.pow((Line_2[1][1] - Line_1[0][1]),2));
+            System.out.println("Distance 2 " + Distance4);
+        }
+
+        if(div_Num == 2){
+            Distance1 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[0][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[1][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 2 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[0][0]),2) + Math.pow((Line_2[1][1] - Line_1[0][1]),2));
+            System.out.println("Distance 2 " + Distance4);
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[2][1]),2));
+            System.out.println("Distance 2 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[1][0]),2) + Math.pow((Line_2[2][1] - Line_1[1][1]),2));
+            System.out.println("Distance 2 " + Distance4);
+
+        }
+
+        else if(div_Num == 3){
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[0][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[1][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[0][0]),2) + Math.pow((Line_2[1][1] - Line_1[0][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[2][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[1][0]),2) + Math.pow((Line_2[2][1] - Line_1[1][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[3][0]),2) + Math.pow((Line_2[3][1] - Line_1[3][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[3][0]),2) + Math.pow((Line_2[2][1] - Line_1[3][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[2][0]),2) + Math.pow((Line_2[3][1] - Line_1[1][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+        }
+
+
+        else if(div_Num == 4){
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[0][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[1][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[0][0]),2) + Math.pow((Line_2[1][1] - Line_1[0][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[2][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[1][0]),2) + Math.pow((Line_2[2][1] - Line_1[1][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[3][0]),2) + Math.pow((Line_2[3][1] - Line_1[3][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[3][0]),2) + Math.pow((Line_2[2][1] - Line_1[3][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[2][0]),2) + Math.pow((Line_2[3][1] - Line_1[1][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[3][0]),2) + Math.pow((Line_2[3][1] - Line_1[3][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[4][0]),2) + Math.pow((Line_2[4][1] - Line_1[4][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[4][0]),2) + Math.pow((Line_2[3][1] - Line_1[4][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[3][0]),2) + Math.pow((Line_2[4][1] - Line_1[3][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+        }
+
+
+        else if(div_Num == 5){
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[0][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[1][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[0][0]),2) + Math.pow((Line_2[1][1] - Line_1[0][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[2][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[1][0]),2) + Math.pow((Line_2[2][1] - Line_1[1][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[3][0]),2) + Math.pow((Line_2[3][1] - Line_1[3][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[3][0]),2) + Math.pow((Line_2[2][1] - Line_1[3][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[2][0]),2) + Math.pow((Line_2[3][1] - Line_1[1][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[3][0]),2) + Math.pow((Line_2[3][1] - Line_1[3][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[4][0]),2) + Math.pow((Line_2[4][1] - Line_1[4][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[4][0]),2) + Math.pow((Line_2[3][1] - Line_1[4][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[3][0]),2) + Math.pow((Line_2[4][1] - Line_1[3][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[4][0]),2) + Math.pow((Line_2[4][1] - Line_1[4][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[5][0]),2) + Math.pow((Line_2[5][1] - Line_1[5][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[5][0]),2) + Math.pow((Line_2[4][1] - Line_1[5][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[4][0]),2) + Math.pow((Line_2[5][1] - Line_1[4][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+        }
+
+        else if(div_Num == 6){
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[0][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[1][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[0][0]),2) + Math.pow((Line_2[1][1] - Line_1[0][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[2][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[1][0]),2) + Math.pow((Line_2[2][1] - Line_1[1][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[3][0]),2) + Math.pow((Line_2[3][1] - Line_1[3][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[3][0]),2) + Math.pow((Line_2[2][1] - Line_1[3][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[2][0]),2) + Math.pow((Line_2[3][1] - Line_1[1][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[3][0]),2) + Math.pow((Line_2[3][1] - Line_1[3][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[4][0]),2) + Math.pow((Line_2[4][1] - Line_1[4][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[4][0]),2) + Math.pow((Line_2[3][1] - Line_1[4][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[3][0]),2) + Math.pow((Line_2[4][1] - Line_1[3][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[4][0]),2) + Math.pow((Line_2[4][1] - Line_1[4][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[5][0]),2) + Math.pow((Line_2[5][1] - Line_1[5][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[4][0]),2) + Math.pow((Line_2[4][1] - Line_1[5][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[5][0]),2) + Math.pow((Line_2[5][1] - Line_1[4][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+
+
+
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[5][0]),2) + Math.pow((Line_2[5][1] - Line_1[5][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[6][0] - Line_1[6][0]),2) + Math.pow((Line_2[6][1] - Line_1[6][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[6][0]),2) + Math.pow((Line_2[5][1] - Line_1[6][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[6][0] - Line_1[5][0]),2) + Math.pow((Line_2[6][1] - Line_1[5][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+        }
+
+
+        else if(div_Num == 7){
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[0][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[1][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[0][0]),2) + Math.pow((Line_2[1][1] - Line_1[0][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[2][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[1][0]),2) + Math.pow((Line_2[2][1] - Line_1[1][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[3][0]),2) + Math.pow((Line_2[3][1] - Line_1[3][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[3][0]),2) + Math.pow((Line_2[2][1] - Line_1[3][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[2][0]),2) + Math.pow((Line_2[3][1] - Line_1[1][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[3][0]),2) + Math.pow((Line_2[3][1] - Line_1[3][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[4][0]),2) + Math.pow((Line_2[4][1] - Line_1[4][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[4][0]),2) + Math.pow((Line_2[3][1] - Line_1[4][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[3][0]),2) + Math.pow((Line_2[4][1] - Line_1[3][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[4][0]),2) + Math.pow((Line_2[4][1] - Line_1[4][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[5][0]),2) + Math.pow((Line_2[5][1] - Line_1[5][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[5][0]),2) + Math.pow((Line_2[4][1] - Line_1[5][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[4][0]),2) + Math.pow((Line_2[5][1] - Line_1[4][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[5][0]),2) + Math.pow((Line_2[5][1] - Line_1[5][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[6][0] - Line_1[6][0]),2) + Math.pow((Line_2[6][1] - Line_1[6][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[6][0]),2) + Math.pow((Line_2[5][1] - Line_1[6][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[6][0] - Line_1[5][0]),2) + Math.pow((Line_2[6][1] - Line_1[5][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[6][0] - Line_1[6][0]),2) + Math.pow((Line_2[6][1] - Line_1[6][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[7][0] - Line_1[7][0]),2) + Math.pow((Line_2[7][1] - Line_1[7][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[6][0] - Line_1[7][0]),2) + Math.pow((Line_2[6][1] - Line_1[7][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[7][0] - Line_1[6][0]),2) + Math.pow((Line_2[7][1] - Line_1[6][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+
+        }
+
+
+
+        else if(div_Num == 8){
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[0][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[1][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[0][0]),2) + Math.pow((Line_2[1][1] - Line_1[0][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[1][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[1][0] - Line_1[1][0]),2) + Math.pow((Line_2[1][1] - Line_1[2][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[1][0]),2) + Math.pow((Line_2[2][1] - Line_1[1][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[2][0]),2) + Math.pow((Line_2[2][1] - Line_1[2][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[3][0]),2) + Math.pow((Line_2[3][1] - Line_1[3][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[2][0] - Line_1[3][0]),2) + Math.pow((Line_2[2][1] - Line_1[3][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[2][0]),2) + Math.pow((Line_2[3][1] - Line_1[1][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[3][0]),2) + Math.pow((Line_2[3][1] - Line_1[3][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[4][0]),2) + Math.pow((Line_2[4][1] - Line_1[4][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[3][0] - Line_1[4][0]),2) + Math.pow((Line_2[3][1] - Line_1[4][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[3][0]),2) + Math.pow((Line_2[4][1] - Line_1[3][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+
+            System.out.println("" );
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[4][0]),2) + Math.pow((Line_2[4][1] - Line_1[4][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[5][0]),2) + Math.pow((Line_2[5][1] - Line_1[5][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[4][0] - Line_1[5][0]),2) + Math.pow((Line_2[4][1] - Line_1[5][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[4][0]),2) + Math.pow((Line_2[5][1] - Line_1[4][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[5][0]),2) + Math.pow((Line_2[5][1] - Line_1[5][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[6][0] - Line_1[6][0]),2) + Math.pow((Line_2[6][1] - Line_1[6][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[5][0] - Line_1[6][0]),2) + Math.pow((Line_2[5][1] - Line_1[6][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[6][0] - Line_1[5][0]),2) + Math.pow((Line_2[6][1] - Line_1[5][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[6][0] - Line_1[6][0]),2) + Math.pow((Line_2[6][1] - Line_1[6][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[7][0] - Line_1[7][0]),2) + Math.pow((Line_2[7][1] - Line_1[7][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[6][0] - Line_1[7][0]),2) + Math.pow((Line_2[6][1] - Line_1[7][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[7][0] - Line_1[6][0]),2) + Math.pow((Line_2[7][1] - Line_1[6][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+
+
+            ///////////////////////////////////////////////////////////
+
+            Distance1 = Math.sqrt(Math.pow((Line_2[7][0] - Line_1[7][0]),2) + Math.pow((Line_2[7][1] - Line_1[7][1]),2));
+            System.out.println("Distance 1 " + Distance1);
+
+            Distance2 = Math.sqrt(Math.pow((Line_2[8][0] - Line_1[8][0]),2) + Math.pow((Line_2[8][1] - Line_1[8][1]),2));
+            System.out.println("Distance 2 " + Distance2);
+
+            Distance3 = Math.sqrt(Math.pow((Line_2[7][0] - Line_1[8][0]),2) + Math.pow((Line_2[7][1] - Line_1[8][1]),2));
+            System.out.println("Distance 3 " + Distance3);
+
+            Distance4 = Math.sqrt(Math.pow((Line_2[8][0] - Line_1[7][0]),2) + Math.pow((Line_2[8][1] - Line_1[7][1]),2));
+            System.out.println("Distance 4 " + Distance4);
+        }
+        /*
+        for (int i=0; i<Line_1.length; i++){
+            for(int j=0; j< Line_1.length; j++){
+
+                Distance = Math.sqrt(Math.pow((Line_2[0][0] - Line_1[0][0]),2) + Math.pow((Line_2[0][1] - Line_1[0][1]),2));
+
+            }
+        }*/
+
+    }
+
+    /**
+     * розподій лінії
+     */
+/*
+    private void LineDivision(){
+
+        double[][] Line_original = {
+                {171,340},
+                {284,385}
+        };
+
+        double X_temp = Line_original[0][0];
+        double delta = Math.abs((Line_original[1][0] - Line_original[0][0]) / div_Num);
+
+        System.out.println("Delta = " + delta);System.out.println();
+
+        /**      Розділення лінії      **//*
+        Line_1[0][0] = Line_original[0][0];
+        Line_1[0][1] = Line_original[0][1];
+        System.out.println("X_" + 0 + " "+ + Line_1[0][0] + " Y_" + 0 + " " + Line_1[0][1]);
+
+        for(int i = 1; i <= div_Num; i++){
+
+            X_temp +=delta;
+            //double y =  Math.abs(3.8*X_temp - 683.6);
+            double y =  Math.abs(0.39*X_temp + 271.9);
+
+            Line_1[i][0] = X_temp;
+            Line_1[i][1] = y;
+
+            System.out.println("X_" + i + " "+ + Line_1[i][0] + " Y_" + i + " " + Line_1[i][1]);
+        }
+    }*/
+
+
+
+
+
     public void lineDetect(){
-        Mat img = Highgui.imread("C:\\biomedical images/example_1_skeleton.png");
+        //LineDivision();
+        startDetect();
+
+        Mat img = Highgui.imread("C:\\biomedical images/skeleton_1/R1-R2.png");
 
 
         // generate gray scale and blur
@@ -246,10 +872,10 @@ public class StartController {
             int randomNumbX = 1 + (int)(Math.random() * ((30 - 1) + 1));
 
             double[] val = lines.get(0, i);
-            Core.putText(img, Integer.toString(i), new Point(val[0] - randomNumbX ,val[1] - randomNumbY),
+            Core.putText(img, Integer.toString(i), new Point(val[0] -20 ,val[1] -20),
                     Core.FONT_ITALIC, 0.7 ,new  Scalar(randomR,randomG,randomB));
 
-            System.out.println( i + ": " + val[0] + " " + val[1] + " " + val[2] + " " + val[3]);
+            //System.out.println( i + ": " + val[0] + " " + val[1] + " " + val[2] + " " + val[3]);
             Core.line(img, new Point(val[0], val[1]), new Point(val[2], val[3]), new Scalar(randomR, randomG, randomB), 2);
 
             //Core.putText(img, Integer.toString(i), new Point(val[2] - randomNumbX ,val[3] - randomNumbY),

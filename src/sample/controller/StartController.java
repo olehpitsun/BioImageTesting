@@ -2,10 +2,12 @@ package sample.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
 import org.opencv.core.Point;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
@@ -17,22 +19,14 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.*;
-import sample.core.DB;
+//import sample.model.Estimate.Estimate.Psnr;
 import sample.model.Estimate.Psnr;
 import sample.model.Filters.FilterColection;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,13 +34,12 @@ import java.util.List;
 import java.util.Vector;
 
 import sample.model.Filters.FiltersOperations;
-import sample.model.HistogramEQ;
+//import sample.model.HistogramEQ;
 import sample.model.PreProcessing.PreProcessingOperation;
 import sample.model.PreProcessing.StartImageParams;
 import sample.model.Segmentation.SegmentationColection;
 import sample.model.Segmentation.SegmentationOperations;
 import sample.tools.ImageOperations;
-import sample.tools.ValidateOperations;
 import sample.util.Estimate;
 import sample.util.PreProcessingParam;
 
@@ -65,7 +58,7 @@ public class StartController {
     @FXML
     private Button saveChangeButton;
     @FXML
-    private Button correctionButton;
+    private Button correctionButton, btnOpenDirectoryChooser;
 
     @FXML
     private TextField researchNameField;
@@ -143,6 +136,8 @@ public class StartController {
         this.mainApp = mainApp;
     }
 
+
+
     /**
      * Initializes the controller class. This method is automatically called
      * after the fxml file has been loaded.
@@ -163,6 +158,7 @@ public class StartController {
 
     @FXML
     public void setResearchName() throws IOException{
+
 
         //HistogramEQ h = new HistogramEQ();
 
@@ -264,16 +260,37 @@ public class StartController {
         //ImageViwer.viewImage(histImage);
     }
 
+    public void chooseDir(ActionEvent event){
+        //Button btnOpenDirectoryChooser = new Button();
+        //btnOpenDirectoryChooser.setText("Open DirectoryChooser");
+        //btnOpenDirectoryChooser.setOnAction(new EventHandler<ActionEvent>() {
+           // @Override
+           // public void handle(ActionEvent event) {
+                DirectoryChooser directoryChooser = new DirectoryChooser();
+                File selectedDirectory =
+                        directoryChooser.showDialog(new Stage());
+
+                if(selectedDirectory == null){
+                    //labelSelectedDirectory.setText("No Directory selected");
+                }else{
+                    System.out.println(selectedDirectory.getAbsolutePath());
+                    //labelSelectedDirectory.setText(selectedDirectory.getAbsolutePath());
+                }
+           // }
+
+    }
+
+
     public void chooseFile(ActionEvent actionEvent) throws java.io.IOException {
 
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Open File");
         chooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files","*.bmp", "*.png", "*.jpg", "*.gif"));
+        chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files","*.bmp", "*.png", "*.jpg", "*.gif", "*.jpeg"));
         File file = chooser.showOpenDialog(new Stage());
         if(file != null) {
 
-            this.averageColor(file);
+           // this.averageColor(file);
             /** return RGB values, average bright**/
             StartImageParams.getStartValues(file);
 
@@ -397,6 +414,7 @@ public class StartController {
 
     @FXML
     public void autoSetting(){
+        //this.Histogram();
         this.autoPreProcFiltersSegmentationSetting();
     }
 
@@ -410,17 +428,18 @@ public class StartController {
         this.image.copyTo(testDst);
 
         /** use testing parametrs for getting HistAverValue **/
-        PreProcessingOperation properation = new PreProcessingOperation(testDst,"1","15", "1", "1");
 
-        SegmentationOperations segoperation = new SegmentationOperations(properation.getOutputImage(), "3",
+        //PreProcessingOperation properation = new PreProcessingOperation(testDst,"1","15", "1", "1");
+/*
+        SegmentationOperations segoperation = new SegmentationOperations(testDst, "3",
                 "0", "0");
         testDst.release();//clear memory
-        properation.getOutputImage().release();
+        //properation.getOutputImage().release();
 
 
         float tempBrightValue = Estimate.getBrightVal();
 
-        /** for very blue **/
+
 
         if(tempBrightValue > 0.9 && tempBrightValue < 2 && Estimate.getBlueAverage() < 110 && Estimate.getRedAverage() > 140){
             System.out.println ("38");
@@ -676,7 +695,9 @@ public class StartController {
         else {
             this.setImageParam(dst, "1","15","1","1");
             System.out.println ("else");
-        }
+        }*/
+
+        this.setImageParam(dst);
 
     }
 
@@ -698,53 +719,91 @@ public class StartController {
 
     }
 
-    /**
-     *
-     * @param dst
-     * @param contrast
-     * @param bright
-     * @param dilate
-     * @param erode
-     */
-    public void setImageParam(Mat dst, String contrast, String bright, String dilate, String erode){
+    public void Histogram(){
 
-        FiltersOperations filtroperation = new FiltersOperations(dst, "4", "9", "", "", "");
+        Mat img = this.image;
 
+        Mat equ = new Mat();
+        img.copyTo(equ);
+        Imgproc.blur(equ, equ, new Size(3, 3));
 
+        Imgproc.cvtColor(equ, equ, Imgproc.COLOR_BGR2YCrCb);
+        List<Mat> channels = new ArrayList<Mat>();
+        Core.split(equ, channels);
+        Imgproc.equalizeHist(channels.get(0), channels.get(0));
+        Core.merge(channels, equ);
+        Imgproc.cvtColor(equ, equ, Imgproc.COLOR_YCrCb2BGR);
 
-        // save image on disk
-        String path ="";
-        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-        Highgui.imwrite( path + timeStamp + ".png", filtroperation.getOutputImage());
-        generatedImagePath = path + timeStamp + ".png";
-        this.compareImages();// call to compare function
-        // delete temp filtered image
-        ImageOperations.deleteFile(path + timeStamp + ".png");
+        Mat gray = new Mat();
+        Imgproc.cvtColor(equ, gray, Imgproc.COLOR_BGR2GRAY);
+        Mat grayOrig = new Mat();
+        Imgproc.cvtColor(img, grayOrig, Imgproc.COLOR_BGR2GRAY);
 
+        this.changedimage = grayOrig;
 
+        //this.setSegmentationImage(this.thresholding(grayOrig));
 
+        FiltersOperations filtroperation = new FiltersOperations(grayOrig, "4", "9", "", "", "");
 
-        PreProcessingOperation properation = new PreProcessingOperation(filtroperation.getOutputImage(),contrast,bright,
-                dilate, erode);
-
-        filtroperation.getOutputImage().release();
-
-        this.setPreProcImage(properation.getOutputImage());
-
-
-        SegmentationOperations segoperation = new SegmentationOperations(properation.getOutputImage(), "3",
+        SegmentationOperations segoperation = new SegmentationOperations(filtroperation.getOutputImage(), "3",
                 "0", "0");
 
-        properation.getOutputImage().release();
+        filtroperation.getOutputImage().release();
         //this.setSegmentationImage(segoperation.getOutputImage());
 
         SegmentationOperations segoperation_1 = new SegmentationOperations(segoperation.getOutputImage(), "1",
                 "200", "255");
 
 
-        this.setSegmentationImage(segoperation_1.getOutputImage());
+        this.setSegmentationImage(segoperation.getOutputImage());
 
         segoperation_1.getOutputImage().release();
+
+        Estimate.setFirstHistAverageValue(null);
+        Estimate.setSecondHistAverageValue(null);
+        System.out.println("------------------------------------------------------------------------------------------");
+    }
+
+    /**
+     *
+     * @param dst
+     */
+    public void setImageParam(Mat dst ){
+
+        FiltersOperations filtroperation = new FiltersOperations(dst, "4", "5", "", "", ""); // медіанний фільтр
+
+        System.out.println("PSNR " + Imgproc.PSNR( filtroperation.getOutputImage(),dst));
+        FiltersOperations filtersOperations_1;
+        if(Imgproc.PSNR( filtroperation.getOutputImage(),dst) < 30){
+            filtersOperations_1 = filtroperation;
+        }else{
+            filtersOperations_1 = new FiltersOperations(filtroperation.getOutputImage(), "1", "3",
+                    "1.0", "", "" ); // гаусовий фільтр
+        }
+        dst.release();/** очистка памяті **/
+
+        this.setPreProcImage(filtersOperations_1.getOutputImage());// вивід на екран
+
+
+
+        //PreProcessingOperation properation = new PreProcessingOperation(filtroperation.getOutputImage(),contrast,"10",
+          //      "0", "3");
+
+
+
+        SegmentationOperations segoperation = new SegmentationOperations(filtersOperations_1.getOutputImage(), "3",
+                "0", "0");
+
+        filtroperation.getOutputImage().release(); /** очистка памяті **/
+        filtersOperations_1.getOutputImage().release(); /** очистка памяті **/
+
+        SegmentationOperations segoperation_1 = new SegmentationOperations(segoperation.getOutputImage(), "1",
+                "250", "255");
+
+        segoperation.getOutputImage().release(); /** очистка памяті **/
+
+        this.setSegmentationImage(segoperation_1.getOutputImage());
+
 
         Estimate.setFirstHistAverageValue(null);
         Estimate.setSecondHistAverageValue(null);

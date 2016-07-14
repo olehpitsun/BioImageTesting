@@ -44,7 +44,7 @@ public class PreProcessing{
 
 
         double amt = 1.2;
-        modifier = new Scalar(0.9,0.9,1.2,1);
+        modifier = new Scalar(1,1,1,1);
         Core.multiply(image, modifier, image);
         return image;
     }

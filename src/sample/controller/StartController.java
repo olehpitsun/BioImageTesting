@@ -719,7 +719,7 @@ public class StartController {
 
     }
 
-    public void Histogram(){
+    public void Histogram() throws IOException{
 
         Mat img = this.image;
 
@@ -756,6 +756,12 @@ public class StartController {
 
 
         this.setSegmentationImage(segoperation.getOutputImage());
+        String g = "C:\\Projects\\BioImageTesting\\myalgorithm.png";
+        try {
+            Highgui.imwrite(g, segoperation.getOutputImage());
+        }catch (Exception e){
+            System.out.print(e);
+        }
 
         segoperation_1.getOutputImage().release();
 

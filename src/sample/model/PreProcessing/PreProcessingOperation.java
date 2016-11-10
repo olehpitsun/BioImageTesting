@@ -108,5 +108,6 @@ public class PreProcessingOperation {
 
         // return the average hue of the image
         return average = average / hsvImg.size().height / hsvImg.size().width;
+
     }
 }

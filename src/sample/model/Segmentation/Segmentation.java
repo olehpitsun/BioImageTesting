@@ -157,33 +157,24 @@ public class Segmentation{
         /*Mat hsvImg = new Mat();
         List<Mat> hsvPlanes = new ArrayList<>();
         Mat thresholdImg = new Mat();
-
         int thresh_type = Imgproc.THRESH_BINARY_INV;
-
         // threshold the image with the average hue value
         hsvImg.create(inputImg.size(), CvType.CV_8U);
         Imgproc.cvtColor(inputImg, hsvImg, Imgproc.COLOR_BGR2HSV);
         Core.split(hsvImg, hsvPlanes);
-
         // get the average hue value of the image
         double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
-
         Imgproc.threshold(hsvPlanes.get(0), thresholdImg, minValue,
                 maxValue, thresh_type);
-
         Imgproc.blur(thresholdImg, thresholdImg, new Size(3, 3));
-
         // dilate to fill gaps, erode to smooth edges
         Imgproc.dilate(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 3);
         Imgproc.erode(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 1);
-
         Imgproc.threshold(thresholdImg, thresholdImg, minValue,
                 maxValue, Imgproc.THRESH_BINARY);
-
         // create the new image
         Mat foreground = new Mat(inputImg.size(), CvType.CV_8UC3, new Scalar(255, 255, 255));
         inputImg.copyTo(foreground, thresholdImg);
-
         Core.bitwise_not(foreground,foreground);
         return foreground;*/
     }
@@ -287,13 +278,13 @@ public class Segmentation{
         else if( threshValue1 > 50){
 
             if(Estimate.getBlueAverage() > 160){
-                rgba.convertTo(rgba, -1, 10d * 21 / 100, 0); rgba = PreProcessing.Dilate(rgba,9) ; System.out.println("81");
+                rgba.convertTo(rgba, -1, 10d * 30 / 100, 0);  rgba = PreProcessing.Dilate(rgba,3) ; System.out.println("81");
             }
             else if(Estimate.getBlueAverage() > 160){
                 rgba.convertTo(rgba, -1, 10d * 27 / 100, 0); rgba = PreProcessing.Dilate(rgba,9) ; System.out.println("82");
             }
             else if(Estimate.getBlueAverage() > 130){
-                rgba.convertTo(rgba, -1, 10d * 35 / 100, 0); rgba = PreProcessing.Dilate(rgba,9) ; System.out.println("83");
+                rgba.convertTo(rgba, -1, 10d * 30 / 100, 0); rgba = PreProcessing.Dilate(rgba,9) ; System.out.println("83");
             }
             else if(Estimate.getBlueAverage() > 70){
                 rgba.convertTo(rgba, -1, 10d * 29 / 100, 0); rgba = PreProcessing.Dilate(rgba,9) ; System.out.println("84");
@@ -340,15 +331,6 @@ public class Segmentation{
         mHSV.convertTo(mHSV, CvType.CV_32FC3);
         TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.MAX_ITER,100,0.1);
         Core.kmeans(mHSV, 1, clusteredHSV, criteria, 20, Core.KMEANS_PP_CENTERS);
-
-
-
-
-
-
-
-
-
         Mat hsvImg = new Mat();
         List<Mat> hsvPlanes = new ArrayList<>();
         Mat thresholdImg = new Mat();
@@ -357,9 +339,6 @@ public class Segmentation{
         Imgproc.cvtColor(mHSV, hsvImg, Imgproc.COLOR_BGR2HSV);
         Core.split(hsvImg, hsvPlanes);
         Imgproc.threshold(hsvPlanes.get(1), thresholdImg, 0 , 200 , thresh_type);
-
-
-
         double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
         Estimate.setSecondHistAverageValue(threshValue);
         System.out.println("After equa " + Estimate.getSecondHistAverageValue());*/
@@ -392,7 +371,7 @@ public class Segmentation{
         Imgproc.cvtColor(equ, gray, Imgproc.COLOR_BGR2GRAY);
         Mat grayOrig = new Mat();
         Imgproc.cvtColor(img, grayOrig, Imgproc.COLOR_BGR2GRAY);
-System.out.println("Histogram work ///");
+        System.out.println("Histogram work ///");
         return grayOrig;
 
 

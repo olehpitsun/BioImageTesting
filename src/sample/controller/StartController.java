@@ -11,6 +11,7 @@ import javafx.stage.DirectoryChooser;
 import org.opencv.core.Point;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
 import sample.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,6 +36,8 @@ import java.util.Vector;
 
 import sample.model.Filters.FiltersOperations;
 //import sample.model.HistogramEQ;
+import sample.model.ImagesCompare;
+import sample.model.PixelArray;
 import sample.model.PreProcessing.PreProcessingOperation;
 import sample.model.PreProcessing.StartImageParams;
 import sample.model.Segmentation.SegmentationColection;
@@ -44,6 +47,8 @@ import sample.util.Estimate;
 import sample.util.PreProcessingParam;
 
 import javax.imageio.ImageIO;
+
+import static org.opencv.highgui.Highgui.CV_LOAD_IMAGE_COLOR;
 
 public class StartController {
 
@@ -155,6 +160,287 @@ public class StartController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+
+    @FXML
+    public void autoSetting(){
+
+
+        Mat img1 = Highgui.imread("C:\\Projects\\BioImageTesting\\src\\sample\\1.png", Highgui.CV_LOAD_IMAGE_COLOR);
+        Mat img2 = Highgui.imread("C:\\Projects\\BioImageTesting\\src\\sample\\2.png", Highgui.CV_LOAD_IMAGE_COLOR);
+
+        PixelArray pixelArray1 = new PixelArray(img1);
+        Mat resImg1Mat = pixelArray1.calculatePixels();
+
+
+        PixelArray pixelArray2 = new PixelArray(img2);
+        Mat resImg2Mat = pixelArray2.calculatePixels();
+
+
+        double allPixelEtalon = pixelArray1.getAllPixelsCount();
+        double C_ki = pixelArray2.getBlackPixelCount();
+
+        double C_ik = pixelArray1.getBlackPixelCount();
+
+        ImagesCompare imagesCompare = new ImagesCompare(img1,img2);
+        double rcp = imagesCompare.getRightClassifiedPixelsCount();
+
+        double result = ((C_ki - rcp) / (allPixelEtalon - C_ik)) * 100;
+
+        System.out.println("Extended Incorrectly clasified pixels = " + result);
+
+        //System.out.println("Dlack Pixels 1 " + pixelArray1.getBlackPixelCount());
+        //System.out.println("Dlack Pixels 2 " + pixelArray2.getBlackPixelCount());
+
+
+        /*
+        Mat g = new Mat(img2.rows(), img2.cols(), 3);
+
+        byte buff[] = new byte[ (int) (img2.total() * img2.channels())];
+
+        int a,w,q;
+        int b;
+        double picdata[][] =  new double[img2.rows()][img2.cols()] ;
+        double[] temp;
+
+        for (a=0 ; a<img2.rows();a++){
+            for (b=0 ; b<img2.cols();b++){
+                temp=   img2.get(a, b);
+                picdata[a][b]=temp[0];
+System.out.println(picdata[a][b]);
+                g.put(a,b,picdata[a][b]);
+            }
+        }*/
+
+
+
+        this.setOriginalImage(resImg1Mat);
+
+
+
+        /*
+        Mat g = img2.clone();
+        int size = (int) (img2.total() * img2.channels());
+        double[] temp = new double[size];
+       //img2.get(0, 0, temp);
+        for (int f = 0; f < size; f++) {
+            //temp[f] = (temp[f] / 2);
+            temp = img2.get(f,f);
+            System.out.println(temp[f]);
+            //g.put(110,110,temp);
+
+        }*/
+
+       /* Rect rectangle = new Rect(10, 10, img2.cols() - 20, img2.rows() - 20);
+
+        Mat bgdModel = new Mat(); // extracted features for background
+        Mat fgdModel = new Mat(); // extracted features for foreground
+        Mat source = new Mat(1, 1, CvType.CV_8U, new Scalar(0));
+
+        convertToOpencvValues(img1); // from human readable values to OpenCV values
+
+        int iterCount = 1;
+        Imgproc.grabCut(img2, img1, rectangle, bgdModel, fgdModel, iterCount, Imgproc.GC_INIT_WITH_MASK);
+
+
+
+        convertToHumanValues(img1); // back to human readable values
+        Imgproc.threshold(img1,img1,0,128,Imgproc.THRESH_TOZERO);
+
+        Mat foreground = new Mat(img2.size(), CvType.CV_8UC1, new Scalar(255, 255, 255));
+        img2.copyTo(foreground, img1);
+
+        Mat src_gray = new Mat();
+        Imgproc.cvtColor(foreground, src_gray, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.blur(src_gray, src_gray, new Size(3, 3));
+
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+        Mat hierarchy = new Mat();
+        Mat mMaskMat = new Mat();
+
+        Scalar lowerThreshold = new Scalar ( 0, 0, 0 );
+        Scalar upperThreshold = new Scalar ( 10, 10, 10 );
+        Core.inRange(foreground, lowerThreshold, upperThreshold, mMaskMat);
+
+        Imgproc.findContours(mMaskMat, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+        List<Moments> mu = new ArrayList<Moments>(contours.size());
+        List<Point> mc = new ArrayList<Point>(contours.size());
+        Mat drawing = Mat.zeros( mMaskMat.size(), CvType.CV_8UC3 );
+
+        Rect rect ;
+
+
+
+
+
+        for( int i = 0; i< contours.size(); i++ ) {
+            rect = null;
+            rect = Imgproc.boundingRect(contours.get(i));
+            Mat crop = foreground.submat(rect);
+
+
+            Mat rgba = crop;
+            Mat tempMat = crop;
+            rgba = new Mat(crop.cols(), crop.rows(), CvType.CV_8UC3);
+            crop.copyTo(rgba);
+            Mat r = crop.clone();
+
+            List<Mat> hsv_planes_temp = new ArrayList<Mat>(3);
+            Core.split(tempMat, hsv_planes_temp);
+
+
+
+
+
+            double contourArea = Imgproc.contourArea(contours.get(i));
+
+            double threshValue1 = PreProcessingOperation.getHistAverage(crop, hsv_planes_temp.get(0));
+            System.out.println("thresh " + i + " " + threshValue1 + " contourArea " + contourArea);
+
+            // Core.rectangle(foreground, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 0, 250), 3);
+            //Highgui.imwrite("C:\\IMAGES\\test\\"+ iterCount +".jpg", crop);
+            iterCount++;
+            // Core.putText(foreground, Integer.toString(iterCount) , new Point(rect.x-20,rect.y),
+            //    Core.FONT_HERSHEY_TRIPLEX, .7 ,new  Scalar(255,255,255));
+            Core.putText(foreground, Double.toString(contourArea) , new Point(rect.x-20,rect.y+10),
+                       Core.FONT_HERSHEY_TRIPLEX, .7 ,new  Scalar(255,0,255));
+            this.setOriginalImage(foreground);
+
+        }*/
+
+
+    }
+
+    /**
+     * Неправильно класифіковані пікселі
+     */
+    @FXML
+    private void InCorrectrlyClasifiedPixels(){
+        Mat img1 = Highgui.imread("C:\\Projects\\BioImageTesting\\src\\sample\\1.png", Highgui.CV_LOAD_IMAGE_COLOR);
+        Mat img2 = Highgui.imread("C:\\Projects\\BioImageTesting\\src\\sample\\2.png", Highgui.CV_LOAD_IMAGE_COLOR);
+
+        PixelArray pixelArray1 = new PixelArray(img1);
+        Mat resImg1Mat = pixelArray1.calculatePixels();
+
+
+        PixelArray pixelArray2 = new PixelArray(img2);
+        Mat resImg2Mat = pixelArray2.calculatePixels();
+
+
+        double pixelA_1 = pixelArray1.getBlackPixelCount();
+        double pixelA_2 = pixelArray2.getBlackPixelCount();
+
+        double result = ((pixelA_1 - pixelA_2) / pixelA_1) * 100;
+
+        System.out.println("Incorrectly clasified pixels = " + result);
+
+        System.out.println("Dlack Pixels 1 " + pixelArray1.getBlackPixelCount());
+        System.out.println("Dlack Pixels 2 " + pixelArray2.getBlackPixelCount());
+    }
+
+    @FXML
+    private void ExtendedInCorrectrlyClasifiedPixels (){
+        Mat img1 = Highgui.imread("C:\\Projects\\BioImageTesting\\src\\sample\\1.png", Highgui.CV_LOAD_IMAGE_COLOR);
+        Mat img2 = Highgui.imread("C:\\Projects\\BioImageTesting\\src\\sample\\2.png", Highgui.CV_LOAD_IMAGE_COLOR);
+
+        PixelArray pixelArray1 = new PixelArray(img1);
+        Mat resImg1Mat = pixelArray1.calculatePixels();
+
+
+        PixelArray pixelArray2 = new PixelArray(img2);
+        Mat resImg2Mat = pixelArray2.calculatePixels();
+
+
+        double allPixelEtalon = pixelArray1.getAllPixelsCount();
+        double C_ki = pixelArray2.getBlackPixelCount();
+
+        double C_ik = pixelArray1.getBlackPixelCount();
+
+        ImagesCompare imagesCompare = new ImagesCompare(img1,img2);
+        double rcp = imagesCompare.getRightClassifiedPixelsCount();
+
+        double result = ((C_ki - rcp) / (allPixelEtalon - C_ik)) * 100;
+
+        System.out.println("Extended Incorrectly clasified pixels = " + result);
+    }
+
+    private static void convertToHumanValues(Mat mask) {
+        byte[] buffer = new byte[3];
+        for (int x = 0; x < mask.rows(); x++) {
+            for (int y = 0; y < mask.cols(); y++) {
+                mask.get(x, y, buffer);
+                int value = buffer[0];
+                if (value == Imgproc.GC_BGD) {
+                    buffer[0] = (byte) 255 ; // for sure background
+                } else if (value == Imgproc.GC_PR_BGD) {
+                    buffer[0] = (byte) 170 ; // probably background
+                } else if (value == Imgproc.GC_PR_FGD) {
+                    buffer[0] = 85; // probably foreground
+                } else {
+                    buffer[0] = 0; // for sure foreground
+
+                }
+                mask.put(x, y, buffer);
+            }
+        }
+    }
+
+    private static void convertToOpencvValues(Mat mask) {
+        byte[] buffer = new byte[3];
+        for (int x = 0; x < mask.rows(); x++) {
+            for (int y = 0; y < mask.cols(); y++) {
+                mask.get(x, y, buffer);
+                int value = buffer[0];
+                if (value >= 0 && value < 64) {
+                    buffer[0] = Imgproc.GC_BGD; // for sure background
+                } else if (value >= 64 && value < 128) {
+                    buffer[0] = Imgproc.GC_PR_BGD; // probably background
+                } else if (value >= 128 && value < 192) {
+                    buffer[0] = Imgproc.GC_PR_FGD; // probably foreground
+                } else {
+                    buffer[0] = Imgproc.GC_FGD; // for sure foreground
+
+                }
+                mask.put(x, y, buffer);
+            }
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @FXML
     public void setResearchName() throws IOException{
@@ -299,7 +585,7 @@ public class StartController {
             //this.showHisImage(file.getAbsolutePath());
 
 
-            this.image = Highgui.imread(file.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_COLOR);
+            this.image = Highgui.imread(file.getAbsolutePath(), CV_LOAD_IMAGE_COLOR);
 
             sample.model.Image.setImageMat(this.image);
 
@@ -412,11 +698,7 @@ public class StartController {
         }
     }
 
-    @FXML
-    public void autoSetting(){
-        //this.Histogram();
-        this.autoPreProcFiltersSegmentationSetting();
-    }
+
 
     @FXML
     public void autoPreProcFiltersSegmentationSetting(){
@@ -719,7 +1001,7 @@ public class StartController {
 
     }
 
-    public void Histogram(){
+    public void Histogram() throws IOException{
 
         Mat img = this.image;
 
@@ -756,6 +1038,12 @@ public class StartController {
 
 
         this.setSegmentationImage(segoperation.getOutputImage());
+        String g = "C:\\Projects\\BioImageTesting\\myalgorithm.png";
+        try {
+            Highgui.imwrite(g, segoperation.getOutputImage());
+        }catch (Exception e){
+            System.out.print(e);
+        }
 
         segoperation_1.getOutputImage().release();
 

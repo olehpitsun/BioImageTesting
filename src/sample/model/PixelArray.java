@@ -39,7 +39,7 @@ public class PixelArray {
             {
                 temp = src.get(a, b);
                 picdata[a][b]=temp[0];
-                System.out.println(picdata[a][b]);
+                //System.out.println(picdata[a][b]);
                 dst.put(a,b,picdata[a][b]);
 
                 allPixelsCount++;
@@ -65,4 +65,39 @@ public class PixelArray {
         return allPixelsCount;
     }
 
+    public Mat getDifference(Mat img1, Mat img2){
+        Mat dst = new Mat(img1.rows(), img1.cols(), 3);
+
+        byte buffEtalon[] = new byte[ (int) (img1.total() * img1.channels())];
+        byte buffSegmented[] = new byte[ (int) (img2.total() * img2.channels())];
+
+        int a,b;
+
+        double picdataEtalon[][] =  new double[img1.rows()][img1.cols()] ;
+        double picdataSegmented[][] =  new double[img2.rows()][img2.cols()] ;
+
+        double[] tempEtalon;
+        double[] tempSegmented;
+
+        for (a=0 ; a < img1.rows(); a++)
+        {
+            for (b=0 ; b < img1.cols(); b++)
+            {
+                tempEtalon = img1.get(a, b);
+                tempSegmented = img2.get(a, b);
+
+                picdataEtalon[a][b]=tempEtalon[0];
+                picdataSegmented[a][b]=tempSegmented[0];
+
+
+                if(picdataEtalon[a][b] == picdataSegmented[a][b]){
+                    dst.put(a,b,255);
+                }else{
+                    dst.put(a,b,0);
+                }
+            }
+        }
+
+        return dst;
+    }
 }

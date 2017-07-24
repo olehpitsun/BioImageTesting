@@ -12,7 +12,7 @@ import org.opencv.core.Point;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
-import sample.Main;
+import sample.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
@@ -164,118 +164,107 @@ public class StartController {
     @FXML
     public void autoSetting(){
 
-        Mat img1 = Highgui.imread("C:\\Projects\\BioImageTesting\\src\\sample\\experimetns1.png", Highgui.CV_LOAD_IMAGE_COLOR);
-        Mat img2 = Highgui.imread("C:\\Projects\\BioImageTesting\\src\\sample\\experimetns2_UMA.png", Highgui.CV_LOAD_IMAGE_COLOR);
-
-        UMA umaEtalon = new UMA(img1);
-        umaEtalon.calculateSegments();
-
-        UMA umaSegmented = new UMA(img2);
-        umaSegmented.calculateSegments();
-
-        System.out.println("AUMA = " + Math.abs(umaEtalon.getContourArea() - umaSegmented.getContourArea()));
-        System.out.println("RUMA = " + ((Math.abs(umaEtalon.getContourArea() - umaSegmented.getContourArea())) /
-                (umaEtalon.getContourArea())) * 100);
-
-
-
-      //PixelDistanceError();
-
-        //пошук різниці
-/*
-        Mat img1 = Highgui.imread("C:\\Projects\\BioImageTesting\\src\\sample\\experimetns1.png", Highgui.CV_LOAD_IMAGE_COLOR);
-        Mat mask = Highgui.imread("C:\\Projects\\BioImageTesting\\src\\sample\\experimetns5.png", Highgui.CV_LOAD_IMAGE_COLOR);
-
+        Mat img1 = Highgui.imread("C:\\data\\BioImageTesting1\\src\\sample\\image\\ex_7_skelet.png", Highgui.CV_LOAD_IMAGE_COLOR);
+        Mat img2 = Highgui.imread("C:\\data\\BioImageTesting1\\src\\sample\\image\\ex_7.png", Highgui.CV_LOAD_IMAGE_COLOR);
 
         PixelArray pixelArray = new PixelArray(img1);
+        pixelArray.calculatePixels();
 
-        Mat dst = pixelArray.getDifference(img1, mask);
-
-        Highgui.imwrite("C:\\Projects\\BioImageTesting\\src\\sample\\result4.png", dst);*/
-
-
+        // координати скелетону
+        List <SkeletonPoints> sk_points = pixelArray.getBlackPixelCount();
 
 
+        // зображення полігону
+        PixelArray pixelpolygon = new PixelArray(img2);
+        pixelpolygon.calculatePixels();
 
 
+        //обчислення ваг
+        List <PointWeight> points_weights = pixelpolygon.getWeight(sk_points);
 
-
-        /*InCorrectrlyClasifiedPixels(img1, mask);
-        ExtendedInCorrectrlyClasifiedPixels(img1, mask);
-        FRAG(img1, mask);
-*/
-
-
-        /*
-        Rect rectangle = new Rect(10, 10, img1.cols() - 20, img1.rows() - 20);
-
-        Mat bgdModel = new Mat(); // extracted features for background
-        Mat fgdModel = new Mat(); // extracted features for foreground
-        Mat source = new Mat(1, 1, CvType.CV_8U, new Scalar(0));
-
-        convertToOpencvValues(mask); // from human readable values to OpenCV values
-
-        int iterCount = 1;
-        Imgproc.grabCut(img1, mask, rectangle, bgdModel, fgdModel, iterCount, Imgproc.GC_INIT_WITH_MASK);
-
-
-
-        convertToHumanValues(mask); // back to human readable values
-        Imgproc.threshold(mask,mask,0,128,Imgproc.THRESH_TOZERO);
-
-        Mat foreground = new Mat(img1.size(), CvType.CV_8UC1, new Scalar(255, 255, 255));
-        img1.copyTo(foreground, mask);
-
-        Mat src_gray = new Mat();
-        Imgproc.cvtColor(foreground, src_gray, Imgproc.COLOR_BGR2GRAY);
-        Imgproc.blur(src_gray, src_gray, new Size(3, 3));
-
-        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-        Mat hierarchy = new Mat();
-        Mat mMaskMat = new Mat();
-
-        Scalar lowerThreshold = new Scalar ( 0, 0, 0 );
-        Scalar upperThreshold = new Scalar ( 10, 10, 10 );
-        Core.inRange(foreground, lowerThreshold, upperThreshold, mMaskMat);
-
-        Imgproc.findContours(mMaskMat, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
-        List<Moments> mu = new ArrayList<Moments>(contours.size());
-        List<Point> mc = new ArrayList<Point>(contours.size());
-        Mat drawing = Mat.zeros( mMaskMat.size(), CvType.CV_8UC3 );
-
-        Rect rect ;
-
-
-
-
-
-        for( int i = 0; i< contours.size(); i++ ) {
-            rect = null;
-            rect = Imgproc.boundingRect(contours.get(i));
-            Mat crop = foreground.submat(rect);
-
-            Mat rgba = crop;
-            Mat tempMat = crop;
-            rgba = new Mat(crop.cols(), crop.rows(), CvType.CV_8UC3);
-            crop.copyTo(rgba);
-
-            List<Mat> hsv_planes_temp = new ArrayList<Mat>(3);
-            Core.split(tempMat, hsv_planes_temp);
-
-            double contourArea = Imgproc.contourArea(contours.get(i));
-
-            double threshValue1 = PreProcessingOperation.getHistAverage(crop, hsv_planes_temp.get(0));
-            System.out.println("thresh " + i + " " + threshValue1 + " contourArea " + contourArea);
-
-            // Core.rectangle(foreground, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 0, 250), 3);
-            //Highgui.imwrite("C:\\IMAGES\\test\\"+ iterCount +".jpg", crop);
-            iterCount++;
-            // Core.putText(foreground, Integer.toString(iterCount) , new Point(rect.x-20,rect.y),
-            //    Core.FONT_HERSHEY_TRIPLEX, .7 ,new  Scalar(255,255,255));
+/*
+        for(int i = 0; i < points_weights.size(); i++ ){
+            System.out.println("!!!! " + points_weights.get(i).x + " - " + points_weights.get(i).y + " - " +
+                    points_weights.get(i).distance);
         }*/
-//Highgui.imwrite("C:\\Projects\\BioImageTesting\\src\\sample\\result.png", dst);
-//this.setOriginalImage(drawing);
+
+        // список кінцевих точок
+        List<EndPoints> endpoint = pixelArray.getEndPointss();
+        System.out.println("Кінцеві точки");
+        for(int i = 0; i <endpoint.size(); i++ ){
+            System.out.println(endpoint.get(i).x + " end p " + endpoint.get(i).y);
+        }
+
+        //внутрішні точки (вузли)
+        List<EndPoints> innerPoints = pixelArray.getInnerPoints();
+        System.out.println("Внутрішні точки");
+        for(int i = 0; i <innerPoints.size(); i++ ){
+            System.out.println(innerPoints.get(i).x + " inner p " + innerPoints.get(i).y);
+        }
+
+
+        pixelArray.estimateWeightOfSkeleton(innerPoints, endpoint, points_weights);
+
+
+        // малювати полігон новий
+        this.drawNewPolygon(points_weights);
+
     }
+
+
+
+    /**
+     * малює новий полігон із скелетону
+     * @param points_weights - список ваг пікселів скелетону
+     */
+    private void drawNewPolygon(List <PointWeight> points_weights){
+        String src_path = "C:\\data\\BioImageTesting1\\src\\sample\\image\\ex_7_skelet.png";
+
+        Mat image = Highgui.imread(src_path);
+
+        for(int h=0;h<points_weights.size();h++) {
+            int x =points_weights.get(h).y;
+            int y =points_weights.get(h).x;
+            int d = points_weights.get(h).distance;
+
+            Core.rectangle(image, new Point(x, y), new Point(x + d, y + d), new Scalar(0, 0, 0), Core.FILLED);
+            Highgui.imwrite("C:\\data\\BioImageTesting1\\src\\sample\\image\\result.png", image);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+        Mat img = Highgui.imread("C:\\data\\test\\src\\img\\1_skelet.png");
+
+        Mat result = img;
+        Imgproc.cvtColor(result, result, Imgproc.COLOR_RGB2GRAY);
+        Mat lines = new Mat();
+        Imgproc.HoughLinesP(result, lines, 1, 2, 120);
+
+        for (int i = 0; i < lines.cols(); i++) {
+            double[] val = lines.get(0, i);
+            Core.line(img, new Point(val[0], val[1]), new Point(val[2], val[3]), new Scalar(0, 0, 255), 2);
+        }
+
+        Highgui.imwrite("C:\\data\\test\\src\\img\\6.png", img);*/
+
+
+
+
 
 
     /**
@@ -361,7 +350,7 @@ public class StartController {
         PixelArray pixelArray2 = new PixelArray(img2);
         Mat resImg2Mat = pixelArray2.calculatePixels();
 
-
+/*
         double pixelA_1 = pixelArray1.getBlackPixelCount();
         double pixelA_2 = pixelArray2.getBlackPixelCount();
 
@@ -370,9 +359,9 @@ public class StartController {
         System.out.println("Incorrectly clasified pixels = " + result);
 
         System.out.println("Dlack Pixels 1 " + pixelArray1.getBlackPixelCount());
-        System.out.println("Dlack Pixels 2 " + pixelArray2.getBlackPixelCount());
+        System.out.println("Dlack Pixels 2 " + pixelArray2.getBlackPixelCount());*/
     }
-
+/*
     @FXML
     private void ExtendedInCorrectrlyClasifiedPixels (Mat img1, Mat img2){
         //Mat img1 = Highgui.imread("C:\\Projects\\BioImageTesting\\src\\sample\\1.png", Highgui.CV_LOAD_IMAGE_COLOR);
@@ -397,7 +386,7 @@ public class StartController {
         double result = ((C_ki - rcp) / (allPixelEtalon - C_ik)) * 100;
 
         System.out.println("Extended Incorrectly clasified pixels = " + result);
-    }
+    }*/
 
     private static void convertToHumanValues(Mat mask) {
         byte[] buffer = new byte[3];

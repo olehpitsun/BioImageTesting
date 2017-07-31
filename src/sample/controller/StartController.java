@@ -26,14 +26,14 @@ import sample.model.Estimate.Psnr;
 import sample.model.Filters.FilterColection;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Vector;
 
 import sample.model.Filters.FiltersOperations;
 //import sample.model.HistogramEQ;
@@ -123,6 +123,9 @@ public class StartController {
     @FXML
     private Label psnrResLabel;
 
+    public static PixelArray pixelpolygon;
+    public static double[][] picdata;
+    public static double fullPolygonArea;
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
@@ -164,23 +167,34 @@ public class StartController {
     @FXML
     public void autoSetting(){
 
-        Mat img1 = Highgui.imread("C:\\data\\BioImageTesting1\\src\\sample\\image\\ex_7_skelet.png", Highgui.CV_LOAD_IMAGE_COLOR);
-        Mat img2 = Highgui.imread("C:\\data\\BioImageTesting1\\src\\sample\\image\\ex_7.png", Highgui.CV_LOAD_IMAGE_COLOR);
+        Mat img1 = Highgui.imread("C:\\data\\BioImageTesting1\\src\\sample\\image\\14\\ex_14_skelet.png", Highgui.CV_LOAD_IMAGE_COLOR);
+        Mat img2 = Highgui.imread("C:\\data\\BioImageTesting1\\src\\sample\\image\\14\\ex_14.png", Highgui.CV_LOAD_IMAGE_COLOR);
+
+
+
+        //fullPolygonArea = calculateArea(img2);
+
 
         PixelArray pixelArray = new PixelArray(img1);
         pixelArray.calculatePixels();
+
+
+
 
         // координати скелетону
         List <SkeletonPoints> sk_points = pixelArray.getBlackPixelCount();
 
 
+
+
         // зображення полігону
-        PixelArray pixelpolygon = new PixelArray(img2);
+        pixelpolygon = new PixelArray(img2);
         pixelpolygon.calculatePixels();
+        picdata = pixelpolygon.getPicdata();
 
 
         //обчислення ваг
-        List <PointWeight> points_weights = pixelpolygon.getWeight(sk_points);
+        List <PointWeight> points_weights = pixelpolygon.getFullSkeletWeight(sk_points);
 
 /*
         for(int i = 0; i < points_weights.size(); i++ ){
@@ -188,10 +202,15 @@ public class StartController {
                     points_weights.get(i).distance);
         }*/
 
+
+        List<SkeletonPoints> l_points = new ArrayList<SkeletonPoints>();
+
         // список кінцевих точок
         List<EndPoints> endpoint = pixelArray.getEndPointss();
         System.out.println("Кінцеві точки");
         for(int i = 0; i <endpoint.size(); i++ ){
+
+            //l_points.add(new SkeletonPoints(endpoint.get(i).x, endpoint.get(i).y));
             System.out.println(endpoint.get(i).x + " end p " + endpoint.get(i).y);
         }
 
@@ -199,26 +218,67 @@ public class StartController {
         List<EndPoints> innerPoints = pixelArray.getInnerPoints();
         System.out.println("Внутрішні точки");
         for(int i = 0; i <innerPoints.size(); i++ ){
+            //l_points.add(new SkeletonPoints(innerPoints.get(i).x, innerPoints.get(i).y));
             System.out.println(innerPoints.get(i).x + " inner p " + innerPoints.get(i).y);
         }
 
 
-        pixelArray.estimateWeightOfSkeleton(innerPoints, endpoint, points_weights);
-
-
         // малювати полігон новий
-        this.drawNewPolygon(points_weights);
+        //this.drawNewPolygon(points_weights);
+        //fullPolygonArea = calculateArea(img2);
+        fullPolygonArea = calculateArea(drawNewPolygon(points_weights));
+        System.out.println("Full area = " + fullPolygonArea );
+
+        List<BranchPoints> branchPointses = pixelArray.estimateWeightOfSkeleton(innerPoints, endpoint, points_weights);
+
+
+        pixelArray.calculateResult(branchPointses);
+
+/*
+        try {
+            findeSkelet(pixelpolygon);
+        }catch (Exception e){
+            System.out.println(e);
+        }*/
+
 
     }
 
+    /**
+     * площа полігону
+     * @param img2
+     */
+    public double calculateArea(Mat img2){
 
+        double area=0.0;
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+        Mat hierarchy =new Mat();
+        Mat mHsv = new Mat();
+        Mat mHsvMask =new Mat();
+
+        Imgproc.cvtColor(img2, mHsv, Imgproc.COLOR_RGB2HSV);
+
+        Scalar lowerThreshold = new Scalar ( 0, 0, 0 ); // Blue color – lower hsv values
+        Scalar upperThreshold = new Scalar ( 179, 255, 10 ); // Blue color – higher hsv values
+        Core.inRange ( mHsv, lowerThreshold , upperThreshold, mHsvMask );
+
+        Imgproc.findContours(mHsvMask, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+
+        for ( int contourIdx=0; contourIdx < contours.size(); contourIdx++ ) {
+
+            //System.out.println(Imgproc.contourArea(contours.get(contourIdx)));
+            area += Imgproc.contourArea(contours.get(contourIdx));
+        }
+
+        return area;
+    }
 
     /**
      * малює новий полігон із скелетону
      * @param points_weights - список ваг пікселів скелетону
      */
-    private void drawNewPolygon(List <PointWeight> points_weights){
-        String src_path = "C:\\data\\BioImageTesting1\\src\\sample\\image\\ex_7_skelet.png";
+    private Mat drawNewPolygon(List <PointWeight> points_weights){
+        String src_path = "C:\\data\\BioImageTesting1\\src\\sample\\image\\16\\ex_16_skelet.png";
 
         Mat image = Highgui.imread(src_path);
 
@@ -228,9 +288,144 @@ public class StartController {
             int d = points_weights.get(h).distance;
 
             Core.rectangle(image, new Point(x, y), new Point(x + d, y + d), new Scalar(0, 0, 0), Core.FILLED);
-            Highgui.imwrite("C:\\data\\BioImageTesting1\\src\\sample\\image\\result.png", image);
+            Highgui.imwrite("C:\\data\\BioImageTesting1\\src\\sample\\image\\12\\result_12.png", image);
         }
+
+        return image;
     }
+
+    public void findeSkelet(PixelArray pixelpolygon) throws IOException {
+
+        int top_count = 0;
+        int bottom_count = 0;
+        int righr_count = 0;
+        int left_count = 0;
+
+        List <SkeletonPoints> skeleton_points = new ArrayList<SkeletonPoints>();
+
+        skeleton_points.add(new SkeletonPoints(19,26));
+        skeleton_points.add(new SkeletonPoints(19,25));
+        skeleton_points.add(new SkeletonPoints(19,30));
+        skeleton_points.add(new SkeletonPoints(19,35));
+        skeleton_points.add(new SkeletonPoints(19,40));
+        skeleton_points.add(new SkeletonPoints(19,45));
+        skeleton_points.add(new SkeletonPoints(19,50));
+        skeleton_points.add(new SkeletonPoints(19,55));
+        skeleton_points.add(new SkeletonPoints(19,60));
+
+        skeleton_points.add(new SkeletonPoints(18,75));
+        skeleton_points.add(new SkeletonPoints(25,86));
+        skeleton_points.add(new SkeletonPoints(29,92));
+        skeleton_points.add(new SkeletonPoints(32,102));
+        skeleton_points.add(new SkeletonPoints(34,104));
+        skeleton_points.add(new SkeletonPoints(38,111));
+        skeleton_points.add(new SkeletonPoints(42,106));
+        skeleton_points.add(new SkeletonPoints(43,101));
+        skeleton_points.add(new SkeletonPoints(46,87));
+        skeleton_points.add(new SkeletonPoints(45,95));
+
+        skeleton_points.add(new SkeletonPoints(50,86));
+        skeleton_points.add(new SkeletonPoints(56,90));
+        skeleton_points.add(new SkeletonPoints(63,94));
+        skeleton_points.add(new SkeletonPoints(72,97));
+        skeleton_points.add(new SkeletonPoints(81,100));
+        skeleton_points.add(new SkeletonPoints(86,102));
+        skeleton_points.add(new SkeletonPoints(91,105));
+        skeleton_points.add(new SkeletonPoints(96,107));
+        skeleton_points.add(new SkeletonPoints(104,110));
+        skeleton_points.add(new SkeletonPoints(109,108));
+
+        skeleton_points.add(new SkeletonPoints(24,25));
+        skeleton_points.add(new SkeletonPoints(31,29));
+        skeleton_points.add(new SkeletonPoints(36,31));
+        skeleton_points.add(new SkeletonPoints(57,38));
+        skeleton_points.add(new SkeletonPoints(65,41));
+        skeleton_points.add(new SkeletonPoints(73,43));
+        skeleton_points.add(new SkeletonPoints(75,45));
+        skeleton_points.add(new SkeletonPoints(78,46));
+        skeleton_points.add(new SkeletonPoints(81,45));
+        skeleton_points.add(new SkeletonPoints(84,42));
+
+        skeleton_points.add(new SkeletonPoints(131,26));
+        skeleton_points.add(new SkeletonPoints(144,50));
+        skeleton_points.add(new SkeletonPoints(156,73));
+
+        skeleton_points.add(new SkeletonPoints(107,109));
+        skeleton_points.add(new SkeletonPoints(112,106));
+        skeleton_points.add(new SkeletonPoints(116,104));
+        skeleton_points.add(new SkeletonPoints(122,101));
+        skeleton_points.add(new SkeletonPoints(129,97));
+        skeleton_points.add(new SkeletonPoints(137,94));
+        skeleton_points.add(new SkeletonPoints(144,90));
+        skeleton_points.add(new SkeletonPoints(156,84));
+        skeleton_points.add(new SkeletonPoints(160,80));
+        skeleton_points.add(new SkeletonPoints(160,78));
+
+
+
+            File imageFile = new File("C:\\data\\BioImageTesting1\\src\\sample\\image\\template.jpg");
+            BufferedImage   img = ImageIO.read(imageFile);
+
+
+
+        try {
+            for(int i = 0; i < skeleton_points.size(); i++){
+                List<Integer> sides = new ArrayList<Integer>();
+
+                top_count = pixelpolygon.topSide(skeleton_points.get(i).x, skeleton_points.get(i).y);
+                bottom_count = pixelpolygon.bottomSide(skeleton_points.get(i).x, skeleton_points.get(i).y);
+                righr_count = pixelpolygon.rightSide(skeleton_points.get(i).x, skeleton_points.get(i).y);
+                left_count = pixelpolygon.leftSide(skeleton_points.get(i).x, skeleton_points.get(i).y);
+
+                if(top_count != 0){
+                    sides.add(top_count);
+                }
+                if(bottom_count !=0){
+                    sides.add(bottom_count);
+                }
+                if(righr_count != 0){
+                    sides.add(righr_count);
+                }
+                if(left_count != 0){
+                    sides.add(left_count);
+                }
+
+                int min = sides.get(0);
+                for(int h=0; h<sides.size(); h++){
+                    if(sides.get(h) < min){
+                        min = sides.get(h);
+                    }
+                }
+
+                try {
+
+                    Graphics2D graph = img.createGraphics();
+                    graph.setColor(Color.YELLOW);
+                    graph.fill(new Rectangle(skeleton_points.get(i).x, skeleton_points.get(i).y,
+                            min, min));
+
+                    graph.fill(new Rectangle(skeleton_points.get(i).x, skeleton_points.get(i).y-min/2,
+                            min, min));
+                    graph.dispose();
+
+                    ImageIO.write(img, "jpg", new File("C:\\data\\BioImageTesting1\\src\\sample\\image\\template.jpg"));
+
+                    System.out.println("Min ==" + min);
+
+                }catch (Exception e){
+                    System.out.println("-----------------" +  e);
+                }
+
+                //points_weight.add(new PointWeight(sk_points.get(i).x, sk_points.get(i).y, min));
+            }
+        }catch (Exception e){
+            System.out.println("+++++++++++++++ " + e);
+        }
+
+    }
+
+
+
 
 
 

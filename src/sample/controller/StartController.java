@@ -163,12 +163,13 @@ public class StartController {
         this.stage = stage;
     }
 
+    public static int img_name = 17;
 
     @FXML
     public void autoSetting(){
 
-        Mat img1 = Highgui.imread("C:\\data\\BioImageTesting1\\src\\sample\\image\\14\\ex_14_skelet.png", Highgui.CV_LOAD_IMAGE_COLOR);
-        Mat img2 = Highgui.imread("C:\\data\\BioImageTesting1\\src\\sample\\image\\14\\ex_14.png", Highgui.CV_LOAD_IMAGE_COLOR);
+        Mat img1 = Highgui.imread("C:\\data\\BioImageTesting1\\src\\sample\\image\\"+img_name+"\\ex_"+img_name+"_skelet.png", Highgui.CV_LOAD_IMAGE_COLOR);
+        Mat img2 = Highgui.imread("C:\\data\\BioImageTesting1\\src\\sample\\image\\"+img_name+"\\ex_"+img_name+".png", Highgui.CV_LOAD_IMAGE_COLOR);
 
 
 

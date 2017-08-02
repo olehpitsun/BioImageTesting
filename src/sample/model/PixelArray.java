@@ -16,6 +16,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import static sample.controller.StartController.img_name;
+
 /**
  * Created by oleh_pi on 10.11.2016.
  */
@@ -79,7 +81,12 @@ public class PixelArray {
         return skeleton_points;
     }
 
-    public double finalLineWeight = 0.0;
+    public double finalLinesWeight = 0.0;
+    public double finalLinesAreaWeight = 0.0;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_CYAN = "\u001B[36m";
 
     /**
      * рахує результати зважування
@@ -93,7 +100,8 @@ public class PixelArray {
             double weight = calculateLineWeight(branchPointses.get(i).getX_1(), branchPointses.get(i).getY_1(),
                     branchPointses.get(i).getX_2(), branchPointses.get(i).getY_2());
 
-            finalLineWeight += weight * branchPointses.get(i).getArea();
+            finalLinesWeight += weight;
+            finalLinesAreaWeight += branchPointses.get(i).getArea();
 
         }
 
@@ -109,10 +117,11 @@ public class PixelArray {
                     branchPointses.get(i).getX_2(), branchPointses.get(i).getY_2());
 
             if(weight != 0 ){
-                System.out.println(branchPointses.get(i).getX_1() + " | " + branchPointses.get(i).getY_1() + " => " +
-                        branchPointses.get(i).getX_2() + " | " + branchPointses.get(i).getY_2() + " Вага гілки: " + weight +
-                        " Різниця площа полігону без гілки: " + branchPointses.get(i).getArea() + "" +
-                        "  .......... " + new BigDecimal((weight * branchPointses.get(i).getArea())/finalLineWeight).setScale(2, RoundingMode.HALF_UP).floatValue()  + "%");
+                System.out.println(ANSI_CYAN + branchPointses.get(i).getY_1() + " | " + branchPointses.get(i).getX_1() + " => " +
+                        branchPointses.get(i).getY_2() + " | " + branchPointses.get(i).getX_2() + ANSI_RESET + " Вага гілки: " + weight +
+                        " |||||| " + ANSI_GREEN + " Відношення = " + new BigDecimal(weight/finalLinesWeight).setScale(2, RoundingMode.HALF_UP).floatValue() +
+                        " % " + ANSI_RESET +"|||||| Різниця площа полігону без гілки: " + branchPointses.get(i).getArea() + "" +
+                        "  .......... " + ANSI_PURPLE + new BigDecimal((branchPointses.get(i).getArea())/finalLinesAreaWeight).setScale(2, RoundingMode.HALF_UP).floatValue()  + "%" + ANSI_RESET);
             }
 
         }
@@ -129,7 +138,7 @@ public class PixelArray {
             int d = points_weights.get(h).distance;
             if(temp_picdata[y][x] < 100){
                 Core.rectangle(image1, new Point(x, y), new Point(x + d, y + d ), new Scalar(0, 0, 0), Core.FILLED);
-                Highgui.imwrite("C:\\data\\BioImageTesting1\\src\\sample\\image\\14\\result_" + line.get(0).x + " _ " + line.get(0).y + ".png", image1);
+                Highgui.imwrite("C:\\data\\BioImageTesting1\\src\\sample\\image\\"+img_name+"\\result_" + line.get(0).x + " _ " + line.get(0).y + ".png", image1);
             }
         }
 
@@ -168,13 +177,14 @@ public class PixelArray {
         }
 
 
+
         for(int h=0;h<points_weights.size();h++) {
             int x =points_weights.get(h).y;
             int y =points_weights.get(h).x;
             int d = points_weights.get(h).distance;
             if(temp_picdata[y][x] < 100){
                 Core.rectangle(image1, new Point(x, y), new Point(x + d, y + d ), new Scalar(0, 0, 0), Core.FILLED);
-                Highgui.imwrite("C:\\data\\BioImageTesting1\\src\\sample\\image\\14\\result_" + x1 + " _ " + y1 + ".png", image1);
+                Highgui.imwrite("C:\\data\\BioImageTesting1\\src\\sample\\image\\"+img_name+"\\result_" + x1 + " _ " + y1 + ".png", image1);
             }
         }
 
@@ -208,7 +218,7 @@ public class PixelArray {
 
         try{
             for(int i = 0 ; i < linePoints.size(); i+=5){
-                weightOfLine += getWeight(linePoints.get(i).x, linePoints.get(i).y);
+                weightOfLine += 5*getWeight(linePoints.get(i).x, linePoints.get(i).y);
             }
         }catch (Exception e){}
 
